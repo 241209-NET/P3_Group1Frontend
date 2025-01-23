@@ -1,0 +1,59 @@
+user-container {
+
+    position: fixed;
+
+    display: flex;
+    align-items: center;
+
+    font-size: 30px;
+    background-color: red;
+    z-index: 1;
+
+}
+
+user-button {
+
+    background-color: white;
+
+}
+
+.user-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    background-color: orange;
+    z-index: 1;
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adds spacing between inputs and button inside the form */
+    width: 100%; /* Ensures inputs/buttons span the full width of the container */
+}
+
+.user-input {
+    /* Styles for input fields */
+    font-size: 20px;
+}
+
+.user-button {
+    
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+
+}
