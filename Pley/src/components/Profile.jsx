@@ -1,4 +1,5 @@
 import { useState, useUserContext } from 'react';
+import './Profile.css';
 
 
 export default function Profile() {
@@ -60,7 +61,7 @@ export default function Profile() {
     }
     */
 
-   /*  async function GetAllReviewsForStore()
+   /*  async function GetAllReviews()
     {
         try
         {
@@ -101,7 +102,7 @@ export default function Profile() {
 
     function DisplayAllReviews()
     {
-        setReviewData(GetAllReviewsForStore());
+        setReviewData(GetAllReviews());
         currentStoreReviews = []
 
         for (const review of reviewData)
@@ -197,17 +198,23 @@ export default function Profile() {
     return (
 
         <div>
-            <h1>Username</h1>
+            <h1>Store Name</h1>
             
-            <div>
-                <img src="" alt="" /> {/** Store image fetched from URL */}
-                Username: {currentUsername}
-                <br />
-                Store Name: {currentStoreName}
-                <br />
-                Desc: {currentDescription}
-                <br />
-                URL: {currentURL}
+            <div id="store">
+                <div id="storeImgDiv">
+                    <img id="storeImg" src="https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U" alt="" /> {/** Store image fetched from URL */}
+                </div>
+                
+                <div id="info">
+                    Username: {currentUsername}
+                    <br />
+                    Store Name: {currentStoreName}
+                    <br />
+                    Desc: {currentDescription}
+                    <br />
+                    URL: {currentURL}
+                </div>
+               
             </div>
 
             <div>
