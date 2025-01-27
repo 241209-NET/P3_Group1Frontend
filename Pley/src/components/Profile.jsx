@@ -211,7 +211,7 @@ export default function Profile() {
             </div>
 
             <div>
-                <button onClick={() => setPressedChangeUsernameButton(true)}>Update Username</button>
+                <button onClick={() => {setPressedChangeUsernameButton(true); setPressedChangePasswordButton(false)}}>Update Username</button>
                 {pressedChangeUsernameButton && (
                     <div>
                         <UpdateUsername />
@@ -222,7 +222,7 @@ export default function Profile() {
 
                 <br />
 
-                <button onClick={() => setPressedChangePasswordButton(true)}>Update Password</button>
+                <button onClick={() => {setPressedChangePasswordButton(true); setPressedChangeUsernameButton(false)}}>Update Password</button>
                 {pressedChangePasswordButton && (
                     <div>
                         <UpdatePassword />

@@ -14,39 +14,39 @@ export default function UserProvider({ children }) {
         return localStorage.getItem('currentUsername') || null;
     });
 
-    const [currentName, setCurrentName] = useState(() => {
-        return localStorage.getItem('currentName') || null;
+    const [currentStoreName, setCurrentStoreName] = useState(() => {
+        return localStorage.getItem('currentStoreName') || null;
     });
 
     // Sync state values with localStorage when they change
     useEffect(() => {
-        if (currentUsername && currentStoreId && currentName) {
+        if (currentUsername && currentStoreId && currentStoreName) {
             localStorage.setItem('currentStoreId', currentStoreId);
             localStorage.setItem('currentUsername', currentUsername);
-            localStorage.setItem('currentName', currentName);
+            localStorage.setItem('currentStoreName', currentStoreName);
         } else {
             localStorage.removeItem('currentStoreId');
             localStorage.removeItem('currentUsername');
-            localStorage.removeItem('currentName');
+            localStorage.removeItem('currentStoreName');
         }
-    }, [currentUsername, currentStoreId, currentName]); // Update all relevant state values
+    }, [currentUsername, currentStoreId, currentStoreName]); // Update all relevant state values
 
     // Login function to set user data
     function login(store) {
         setCurrentStoreId(store.storeId);
         setCurrentUsername(store.username);
-        setCurrentName(store.name);
+        setCurrentStoreName(store.name);
     }
 
     // Logout function to clear user data
     function logout() {
         setCurrentStoreId(null);
         setCurrentUsername(null);
-        setCurrentName(null);
+        setCurrentStoreName(null);
     }
 
     return (
-        <UserContext.Provider value={{ currentStoreId, currentUsername, currentName, login, logout }}>
+        <UserContext.Provider value={{ currentStoreId, currentUsername, currentStoreName, login, logout }}>
             {children}
         </UserContext.Provider>
     );
