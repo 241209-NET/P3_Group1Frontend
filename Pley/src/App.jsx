@@ -7,7 +7,10 @@ import Home from './components/Home';
 import NavBar from './components/NavBar';
 
 import Profile from './components/Profile';
-import Register from './components/Register';  
+import Register from './components/Register';
+//need to take this out
+import CustomerList from './components/CustomerList'; 
+
 import './App.css';
 
 export default function App() {
@@ -25,6 +28,7 @@ export default function App() {
               <Route path="/customer" element={<Customer />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/customer-list" element={<CustomerList />} />
             </Routes>
           </div>
         </div>
