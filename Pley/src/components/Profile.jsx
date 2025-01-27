@@ -44,9 +44,10 @@ export default function Profile() {
           try {
             // Fetch all reviews (hardcoded for now)
             const response = await axios.get("http://localhost:5028/api/Reviews");
-            const currentStore = response.data.filter((review) => review.storeId === currentStoreId);
+            setReviewData(response.data)
 
-            setReviewData(currentStore);
+            const currentStore = response.data.filter((review) => review.storeId === currentStoreId);
+            setStoreData(currentStore);
           } catch (err) {
             setError(err.response?.data?.message || "Failed to fetch reviews.");
           }
@@ -54,8 +55,6 @@ export default function Profile() {
         fetchReviews();
       }, []);
 
-    
-      
 
     async function UpdateStore()
     {
@@ -115,25 +114,25 @@ export default function Profile() {
     return (
 
         <div className='profile'>
-            <h1>{JSON.stringify(storeData.at(0)?.store?.name)}</h1>
+            <h1>{storeData.at(0)?.store?.name || "THIS WON'T WORK"}</h1>
             
             <div id="store">
                 <div id="storeImgDiv">
-                    <img id="storeImg" src="https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U" alt="" /> {/** Store image fetched from URL */}
+                    <img id="storeImg" src={`${storeData.at(0)?.store?.url}`} alt="" /> {/** Store image fetched from URL */}
                 </div>
                 
-{/*                 <div id="info">
+                <div id="info">
                     <p>
-                        <b>Username: </b> {JSON.stringify(storeData.at(0).store.username)}
+                        <b>Username: </b> {storeData.at(0)?.store?.username}
                         <br />
-                        <b>Store Name: </b> {JSON.stringify(storeData.at(0).store.name)}
+                        <b>Store Name: </b> {storeData.at(0)?.store?.name}
                         <br />
-                        <b>Desc: </b> {JSON.stringify(storeData.at(0).store.description)}
+                        <b>Desc: </b> {storeData.at(0)?.store?.description}
                         <br />
-                        <b>URL: </b> {JSON.stringify(storeData.at(0).store.url)}
+                        <b>URL: </b> {storeData.at(0)?.store?.url}
                     </p>
 
-                </div> */}
+                </div>
                
             </div>
 

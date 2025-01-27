@@ -12,7 +12,7 @@
     color: #1e1e1e;
     transition: background 0.5s ease;
     margin-left: 2rem;
-    gap: 30rem;
+    gap: 10rem;
 }
 
 #store:hover {
@@ -28,6 +28,8 @@
 
 #storeImg {
     max-width: 100%;
+    min-width: 50%;
+    min-height: 50%;
     height: auto;
     border-radius: 1rem;
     box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.1);
