@@ -1,0 +1,124 @@
+.reviews-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.link-card {
+    display: flex;
+    justify-content: center;
+}
+
+.review-card {
+    display: flex;
+    align-items: center;
+    width: 60%;
+    border-radius: 1rem;
+    padding: 1rem;
+    background: #5eb8ed;
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    color: black;
+    transition: background 0.5s ease;
+}
+
+.review-content {
+    padding-right: 1rem;
+    width: 40%;
+    padding-left: 10%;
+}
+
+.review-image{
+    max-width: 40%;
+}
+
+.review-image img {
+    max-width: 50%;
+    height: 50%;
+    border-radius: 0.5rem;
+}
+
+.new-review-form {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: #1e1e1e;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.new-review-form h3 {
+    color: #f5f5f5;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+}
+
+.input-field {
+    display: flex;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #424242;
+    border-radius: 0.5rem;
+    background: #2c2c2c;
+    color: #e0e0e0;
+    font-size: 1rem;
+    resize: none;
+    width: 50%;
+}
+
+#textarea-field {
+    height: 100%;
+}
+
+.input-field select {
+    appearance: none;
+    padding: 1rem;
+    background: #2c2c2c;
+    color: #e0e0e0;
+    border: 1px solid #424242;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+.submit-button {
+    display: flex;
+    width: 25%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    background: #5eb8ed;
+    color: #1e1e1e;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    text-align: center;
+    transition: background 0.5s ease;
+    justify-content: center;
+}
+
+.submit-button:hover, .review-card:hover {
+    background: #3c9ad9;
+}
+
+.input-field:focus, .submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 0.2rem #5eb8ed;
+}
+
+#select-field {
+    width: 10%;
+}

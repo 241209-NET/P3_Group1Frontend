@@ -11,7 +11,7 @@ export default function UserProvider({ children }) {
     });
 
     const [currentUsername, setCurrentUsername] = useState(() => {
-        return localStorage.getItem('currentUsername') || null;
+        return localStorage.getItem('currentUsername') || null; //name of store
     });
 
     const [currentStoreName, setCurrentStoreName] = useState(() => {

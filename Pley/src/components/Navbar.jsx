@@ -14,7 +14,7 @@ export default function NavBar() {
         // Links to show when no user is logged in
         <>
           <Link to="/home" className="nav-link">Home</Link>
-          <Link to="/customer" className="nav-link">Customer</Link>
+          <Link to="/customer-list" className="nav-link">Customer List</Link>
           <Link to="/register" className="nav-link">Register</Link>
           <Link to="/profile" className="nav-link">Profile</Link>
         </>
