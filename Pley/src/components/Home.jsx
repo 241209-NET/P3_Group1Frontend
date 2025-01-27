@@ -106,7 +106,7 @@ function Home() {
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
                 // TODO, need to route it properly /review/${review.id}: this might not correct routing
-                <Link to={`/review/${review.id}`} key={review.id} className="link-card">
+                <Link to={`/customer/${customer.id}`} key={review.id} className="link-card">
                     <div className="review-card" key={index}>
                     <div className="review-content">
                         {/* Left div: Review details */}
