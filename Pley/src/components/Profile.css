@@ -1,0 +1,29 @@
+#store
+{
+    display: flex;
+    flex-direction: row;
+    position: auto;
+}
+
+#info
+{
+    position: relative;
+    text-align: center;
+    left: 50%;
+    bottom: 40%;
+}
+
+#storeImg
+{
+    position: relative;
+/*     width: 20%;
+    height: 20%; */
+}
+
+#storeImgDiv
+{
+    position: relative;
+    right: 50%;
+    width: fit-content;
+    height: fit-content;
+}

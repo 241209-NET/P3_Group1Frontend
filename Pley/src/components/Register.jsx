@@ -11,7 +11,7 @@ import './Register.css';
 
 export default function Register() {
 
-    //const { login, logout, currentId } = useUserContext();
+    //const { login, logout, currentStoreId, currentUsername, currentStoreName } = useUserContext();
 
     const [username, setUsername] = useState('');
     const [storeName, setStoreName] = useState('');
@@ -132,7 +132,7 @@ export default function Register() {
         event.preventDefault(); 
 
         if (!isValidPassword(password)) {
-            alert("Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
+            alert("Password must be at least 8 characters long and include uppercase, lowercase, and a number");
             return;
         }
 
@@ -158,8 +158,10 @@ export default function Register() {
             {(pressedSignUp === false) ? (
 
                 <div className="user-container">
-                <h2>Login to your account</h2>
+                
+                <h2>- Login to your account -</h2>
                 <form onSubmit={HandleLogin}>
+
 
                         <input
                             className="user-input"
@@ -184,15 +186,18 @@ export default function Register() {
                     </button>
                     
                 </form>
-                <button onClick={() => setPressedSignUp(state => !state)} className="user-button">Create new account</button>
+                <div className="change-register">
+                    - Don't have an account? -
+                    <button onClick={() => setPressedSignUp(state => !state)} className="change-button">Signup</button>
+                </div>
             </div>
 
           ) : (
 
             <div className="user-container">
-                <h2>Create new account</h2>
+                <h2>- Create new account -</h2>
                 <form onSubmit={HandleSignup}>
-                    <div>
+
                         <input
                             className="user-input"
                             value={username}
@@ -200,17 +205,15 @@ export default function Register() {
                             placeholder="username"
                             required
                         />
-                    </div>
-                    <div>
+
                         <input
                             className="user-input"
                             value={storeName}
                             onChange={(e) => setStoreName(e.target.value)}
                             required
-                            placeholder="Store name"
+                            placeholder="store name"
                         />
-                    </div>
-                    <div>
+
                         <input
                             className="user-input"
                             type="password"
@@ -219,13 +222,16 @@ export default function Register() {
                             required
                             placeholder="password"
                         />
-                    </div>
+                    
                     <button type="submit" className="user-button">
                         Submit
                     </button>
                     
                 </form>
-                <button onClick={() => setPressedSignUp(state => !state)} className="user-button">Login to old account</button>
+                <div className="change-register">
+                    - Already have an account? -
+                    <button onClick={() => setPressedSignUp(state => !state)} className="change-button">Login</button>
+                </div>
             </div>
 
           )}
