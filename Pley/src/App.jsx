@@ -25,7 +25,7 @@ export default function App() {
               {/* Add your routes here */}
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
-              <Route path="/customer" element={<Customer />} />
+              <Route path={`/customer/${id}`} element={<Customer />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/customer-list" element={<CustomerList />} />
