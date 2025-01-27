@@ -14,7 +14,7 @@ export default function Profile() {
     let currentDescription = "Lorem Ipsum";
     let currentURL = "URL";
     let currentStoreName = "StoreName";
-    let currentStoreId = 2;
+    let currentStoreId = 1;
     
     //for password change
     const [password1, setPassword1] = useState('');
@@ -44,15 +44,14 @@ export default function Profile() {
           try {
             // Fetch all reviews (hardcoded for now)
             const response = await axios.get("http://localhost:5028/api/Reviews");
-            
+            const currentStore = response.data.filter((review) => review.storeId === currentStoreId);
 
-            setReviewData(response.data)
+            setReviewData(currentStore);
           } catch (err) {
             setError(err.response?.data?.message || "Failed to fetch reviews.");
           }
         };
         fetchReviews();
-        setStoreData(reviewData.filter((review) => review.storeId === currentStoreId));
       }, []);
 
     
@@ -75,7 +74,7 @@ export default function Profile() {
     
     function DisplayAllReviews()
     {
-        //console.log(storeData.at(0));
+        //]console.log(storeData.at(0));
         return (
             <ul> 
                 {error && <p className="error">{error}</p>}
@@ -116,14 +115,14 @@ export default function Profile() {
     return (
 
         <div className='profile'>
-            <h1>Store Name</h1>
+            <h1>{JSON.stringify(storeData.at(0)?.store?.name)}</h1>
             
             <div id="store">
                 <div id="storeImgDiv">
                     <img id="storeImg" src="https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U" alt="" /> {/** Store image fetched from URL */}
                 </div>
                 
- {/*                <div id="info">
+{/*                 <div id="info">
                     <p>
                         <b>Username: </b> {JSON.stringify(storeData.at(0).store.username)}
                         <br />
