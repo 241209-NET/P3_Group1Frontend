@@ -11,11 +11,11 @@ export default function UserProvider({ children }) {
     });
 
     const [currentUsername, setCurrentUsername] = useState(() => {
-        return localStorage.getItem('currentUsername') || null;
+        return localStorage.getItem('currentUsername') || null; //name of store
     });
 
     const [currentName, setCurrentName] = useState(() => {
-        return localStorage.getItem('currentName') || null;
+        return localStorage.getItem('currentName') || null; //name of current user
     });
 
     // Sync state values with localStorage when they change

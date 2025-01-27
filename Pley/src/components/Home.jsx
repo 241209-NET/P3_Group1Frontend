@@ -167,6 +167,10 @@ function Home() {
             <button type="submit" className="submit-button">Submit Review</button>
         </form>
       </div>
+
+      <Link to="/customer-list">
+        <button>Go to Customer List</button>
+      </Link>
     </div>
   );
 }
