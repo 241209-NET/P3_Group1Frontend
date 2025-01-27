@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import {homeCustomer} from './Home.jsx';
 
 export default function Customer() {
 
     const [reviews, setReviews] = useState([]);
     const [error, setError] = useState("");
     let customer = {
-        id: homeCustomer.id,
+        id: 1,
         name: "Paul",
         rating: 3.5,
         url: "HTTPS"}
@@ -15,8 +14,8 @@ export default function Customer() {
      const fetchReviews = async () => {
        try {
          // Fetch all reviews (hardcoded for now)
-         //const response = await axios.get("http://localhost:8080/api/Reviews");
-         const response = [
+         const response = await axios.get("http://localhost:5028/api/Reviews");
+         /* const response = [
            {
              name: "John Doe",
              store: "Pizza Hut",
@@ -41,7 +40,7 @@ export default function Customer() {
              comment: "Not bad",
              rating: 3,
            },
-         ];
+         ]; */
          setReviews(response);
        } catch (err) {
          setError(err.response?.data?.message || "Failed to fetch reviews.");

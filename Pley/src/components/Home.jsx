@@ -16,34 +16,9 @@ function Home() {
     const fetchReviews = async () => {
       try {
         // Fetch all reviews (hardcoded for now)
-        //const response = await axios.get("http://localhost:8080/api/Reviews");
-        const response = [
-          {
-            name: "John Doe",
-            store: "Pizza Hut",
-            comment: "Excellent",
-            rating: 5,
-          },
-          {
-            name: "Jane Smith",
-            store: "McDonald",
-            comment: "Good",
-            rating: 4,
-          },
-          {
-            name: "Sam Lee",
-            store: "Taco Bell",
-            comment: "Bad",
-            rating: 2,
-          },
-          {
-            name: "Emily Davis",
-            store: "Walmart",
-            comment: "Not bad",
-            rating: 3,
-          },
-        ];
-        setReviews(response);
+        const response = await axios.get("http://localhost:5028/api/Reviews");
+        
+        setReviews(response.data);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch reviews.");
       }
@@ -106,20 +81,20 @@ function Home() {
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
                 // TODO, need to route it properly /review/${review.id}: this might not correct routing
-                <Link to={`/customer/${customer.id}`} key={review.id} className="link-card">
+                <Link to={`/customer/${review.customer?.id}`} key={review.id} className="link-card">
                     <div className="review-card" key={index}>
                     <div className="review-content">
                         {/* Left div: Review details */}
-                        <h3>{review.name}</h3>
-                        <p>Store: {review.store}</p>
+                        <h3>{review.customer.name}</h3>
+                        <p>Store: {review.store?.name}</p>
                         <p className="rating">Rating: {review.rating}/5 ⭐</p>
                         <p>{review.comment}</p>
                     </div>
                     <div className="review-image">
                         {/* Right div: Image */}
                         <img
-                        src="https://thispersondoesnotexist.com/" //TODO: URL from backend
-                        alt={`${review.name}'s picture`}
+                        src={review.customer?.url} //TODO: URL from backend
+                        alt={`${review.customer?.name}'s picture`}
                         />
                     </div>
                     </div>

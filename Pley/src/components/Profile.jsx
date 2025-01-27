@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 import './Profile.css';
 
 
@@ -13,12 +14,7 @@ export default function Profile() {
     let currentDescription = "Lorem Ipsum";
     let currentURL = "URL";
     let currentStoreName = "StoreName";
-    let currentStoreId = 1;
-    let customer = {
-        id: 1,
-        name: "Paul",
-        rating: 3.5,
-        url: "HTTPS"}
+    let currentStoreId = 2;
     
     //for password change
     const [password1, setPassword1] = useState('');
@@ -30,6 +26,7 @@ export default function Profile() {
     const [description, setDescription] = useState('');
     const [url, setUrl] = useState('');
 
+
     const [error, setError] = useState("");
 
     const [pressedChangeUsernameButton, setPressedChangeUsernameButton] = useState(false);
@@ -39,116 +36,68 @@ export default function Profile() {
     const [pressedChangeUrlButton, setPressedChangeUrlButton] = useState(false);
 
     const [reviewData, setReviewData] = useState([]);
-
+    const [storeData, setStoreData] = useState([]);
 
 
       useEffect(() => {
         const fetchReviews = async () => {
           try {
             // Fetch all reviews (hardcoded for now)
-            //const response = await axios.get("http://localhost:8080/api/Reviews");
-            const response = [
-              {
-                name: "John Doe",
-                store: "Pizza Hut",
-                comment: "Excellent",
-                rating: 5,
-              },
-              {
-                name: "Jane Smith",
-                store: "McDonald",
-                comment: "Good",
-                rating: 4,
-              },
-              {
-                name: "Sam Lee",
-                store: "Taco Bell",
-                comment: "Bad",
-                rating: 2,
-              },
-              {
-                name: "Emily Davis",
-                store: "Walmart",
-                comment: "Not bad",
-                rating: 3,
-              },
-            ];
-            setReviewData(response);
+            const response = await axios.get("http://localhost:5028/api/Reviews");
+            
+
+            setReviewData(response.data)
           } catch (err) {
             setError(err.response?.data?.message || "Failed to fetch reviews.");
           }
         };
         fetchReviews();
+        setStoreData(reviewData.filter((review) => review.storeId === currentStoreId));
       }, []);
+
     
+      
 
-    /*
-    async function ConfirmPasswordChange() {
-
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-        if (!regex.test(password1)) {
-
-            alert("Password must be at least 8 characters long and include uppercase, lowercase, and a number");
-            return;
-
+    async function UpdateStore()
+    {
+        try
+        {
+            const response = await axios.patch("http://localhost:5028/api/Store");
+        } 
+        catch (err)
+        {
+            setError(err.response?.data?.message || "Failed to fetch store.");
         }
-        if (!password1.test(password2)) {
-
-            alert("passwords do not match");
-            return;
-
-        }
-
-        //UPDATE PASSWORD HERE
-        try {
-            const response = await axios.patch(`https://p3-pley.azurewebsites.net/api/Store/password/${password1}`);
-        } catch (error) {
-            if (error.response && error.response.status === 400) {
-                //username is available
-                return true;
-            }
-            return false;
-        }
-
+        
+        setStoreData(response);
     }
-    */
 
-
+    
     function DisplayAllReviews()
     {
-        //setReviewData(GetAllReviews());
-        var currentStoreReviews = []
-
-        for (const review of reviewData)
-        {
-            if (review.storeId == currentStoreId)
-            {
-                currentStoreReviews += review;
-            }
-        }
-
+        //console.log(storeData.at(0));
         return (
             <ul> 
                 {error && <p className="error">{error}</p>}
                 {!error && (
                     <div className="reviews-container">
                     {reviewData.length > 0 ? (
-                        reviewData.map((review, index) => (
+                        reviewData.filter((review) => review.storeId === currentStoreId)
+                        .map((review, index) => (
                 // TODO, need to route it properly /review/${review.id}: this might not correct routing
                         <div className="review-card" key={index}>
                         <div className="review-content">
                             {/* Left div: Review details */}
-                            <h3>{review.name}</h3>
-                            <p>Store: {review.store}</p>
-                            <p className="rating">Rating: {review.rating}/5 ⭐</p>
+                            <h3>{review.customer?.name}</h3>
+                            <p><b>Store: </b>{review.store?.name}</p>
+                            <p className="rating"><b>Rating: </b>{review.rating}/5 ⭐</p>
                             <p>{review.comment}</p>
                         </div>
                         <div className="review-image">
                             {/* Right div: Image */}
                             <img
-                            src="https://thispersondoesnotexist.com/" //TODO: URL from backend
-                            alt={`${review.name}'s picture`}
+                            src={review.customer?.url} //TODO: URL from backend
+                            alt={`${review.customer?.name}'s picture`}
                             />
                         </div>
                         </div>
@@ -174,23 +123,26 @@ export default function Profile() {
                     <img id="storeImg" src="https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U" alt="" /> {/** Store image fetched from URL */}
                 </div>
                 
-                <div id="info">
-                    Username: {currentUsername}
-                    <br />
-                    Store Name: {currentStoreName}
-                    <br />
-                    Desc: {currentDescription}
-                    <br />
-                    URL: {currentURL}
-                </div>
+ {/*                <div id="info">
+                    <p>
+                        <b>Username: </b> {JSON.stringify(storeData.at(0).store.username)}
+                        <br />
+                        <b>Store Name: </b> {JSON.stringify(storeData.at(0).store.name)}
+                        <br />
+                        <b>Desc: </b> {JSON.stringify(storeData.at(0).store.description)}
+                        <br />
+                        <b>URL: </b> {JSON.stringify(storeData.at(0).store.url)}
+                    </p>
+
+                </div> */}
                
             </div>
 
-            <div class="buttons">
+            <div className="buttons">
                 <button onClick={() => {setPressedChangeUsernameButton(true); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Username</button>
                 {pressedChangeUsernameButton && (
                     <div>
-                        <form >
+                        <form onSubmit={UpdateStore} >
 
                             <div>
                                 <input
@@ -215,7 +167,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(true), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Password</button>
                 {pressedChangePasswordButton && (
                     <div>
-                        <form>
+                        <form onSubmit={UpdateStore}>
                             <div>
                                 <input
                                     //className="user-input"
@@ -250,7 +202,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(true), setPressedChangeUrlButton(false)}}>Update Store Name</button>
                 {pressedChangeStoreNameButton && (
                     <div>
-                        <form >
+                        <form onSubmit={UpdateStore} >
 
                             <div>
                                 <input
@@ -274,7 +226,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(true), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Description</button>
                 {pressedChangeDescButton && (
                     <div>
-                        <form >
+                        <form onSubmit={UpdateStore} >
 
                             <div>
                                 <textarea
@@ -297,7 +249,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(true)}}>Update Image URL</button>
                 {pressedChangeUrlButton && (
                     <div>
-                        <form >
+                        <form onSubmit={UpdateStore} >
 
                             <div>
                                 <input
