@@ -78,18 +78,14 @@ function CustomerList() {
               </Link>
             </td>
             <td>
-              <Link to={`/customer/${customer?.id}`} className="link-card">
                 {customer.avgRating}/5⭐
-              </Link>
             </td>
             <td>
-              <Link to={`/customer/${customer?.id}`} className="link-card">
                 <img
                   src={customer.url || "https://via.placeholder.com/150"}
                   alt={`${customer.name}'s avatar`}
                   className="customer-image"
                 />
-              </Link>
             </td>
           </tr>
         ))}
@@ -110,7 +106,11 @@ function CustomerList() {
           <tbody>
             {top3Customers.map((customer, index) => (
               <tr key={index}>
-                <td>{customer.name}</td>
+                <td>
+                  <Link to={`/customer/${customer?.id}`} className="link-card">
+                    {customer.name}
+                  </Link>
+                </td>
                 <td>{customer.avgRating}/5⭐</td>
                 <td>
                   <img
@@ -136,7 +136,11 @@ function CustomerList() {
           <tbody>
             {bottom3Customers.map((customer, index) => (
               <tr key={index}>
-                <td>{customer.name}</td>
+                <td>
+                  <Link to={`/customer/${customer?.id}`} className="link-card">
+                    {customer.name}
+                  </Link>
+                </td>
                 <td>{customer.avgRating}/5⭐</td>
                 <td>
                   <img

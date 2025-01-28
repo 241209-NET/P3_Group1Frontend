@@ -84,7 +84,7 @@ form {
     font-size: 1rem;
     resize: none;
     width: 80%;
-    font-family: Inter, system-ui, Avenir, Helvetica, sans-serif; 
+    /* font-family: Inter, system-ui, Avenir, Helvetica, sans-serif;  */
 }
 
 .submit-button {
@@ -106,7 +106,7 @@ form {
 
 #textarea-field {
     height: 8rem;
-    font-family: Inter, system-ui, Avenir, Helvetica, sans-serif;
+    /* font-family: Inter, system-ui, Avenir, Helvetica, sans-serif; */
 }
 
 .submit-button:hover, .review-card:hover {

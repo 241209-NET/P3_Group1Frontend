@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from './UserContext';
 import axios from 'axios';
-import '../App.css';
+// import '../App.css';
 import './Register.css';
 
 export default function Register() {

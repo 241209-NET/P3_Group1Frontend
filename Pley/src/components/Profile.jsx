@@ -148,7 +148,7 @@ export default function Profile() {
     return (
 
         <div className='profile'>
-            <h1>{storeData.at(0)?.store?.name}</h1>
+            <h1 id='profile-h1'>{storeData.at(0)?.store?.name}</h1>
             
             <div id="store">
                 <div id="storeImgDiv">
