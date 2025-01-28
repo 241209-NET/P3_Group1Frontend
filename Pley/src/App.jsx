@@ -8,17 +8,21 @@ import NavBar from './components/NavBar';
 
 import Profile from './components/Profile';
 import Register from './components/Register';
-//need to take this out
 import CustomerList from './components/CustomerList'; 
 
 import './App.css';
+import logo_pley_1 from './assets/logo_pley_1.png';
+import logo_pley_2 from './assets/logo_pley_2.png';
+import logo_pley_2_crop from './assets/logo_pley_2_crop.png';
 
 export default function App() {
   return (
     <UserProvider>
       <Router>
         <div>
-          <div className="title">PLEY</div>
+          <div className="title">
+            <img id='logo-image' src = {logo_pley_2_crop}/>
+          </div>
           <NavBar />
           <div>
             <Routes>

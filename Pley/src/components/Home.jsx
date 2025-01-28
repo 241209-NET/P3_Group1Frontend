@@ -16,7 +16,7 @@ function Home() {
       try {
         // Fetch all reviews
         const response = await axios.get("http://localhost:5028/api/Reviews");
-        setReviews(response.data); // Correctly handle API response
+        setReviews(response.data);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch reviews.");
       }
@@ -135,10 +135,6 @@ function Home() {
           </button>
         </form>
       </div>
-
-      <Link to="/customer-list">
-        <button>Go to Customer List</button>
-      </Link>
     </div>
   );
 }
