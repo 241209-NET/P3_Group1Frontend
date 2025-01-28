@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import './Profile.css';
+import { useParams } from 'react-router-dom'
 
 
 export default function Profile() {
@@ -10,11 +11,7 @@ export default function Profile() {
     //const { logout, currentDescription } = useUserContext();
     //const { logout, currentURL } = useUserContext();
 
-    let currentUsername = "test";
-    let currentDescription = "Lorem Ipsum";
-    let currentURL = "URL";
-    let currentStoreName = "StoreName";
-    let currentStoreId = 1;
+    const currentStoreId = 1;
     
     //for password change
     const [password1, setPassword1] = useState('');
@@ -46,7 +43,7 @@ export default function Profile() {
             const response = await axios.get("http://localhost:5028/api/Reviews");
             setReviewData(response.data)
 
-            const currentStore = response.data.filter((review) => review.storeId === currentStoreId);
+            const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
             setStoreData(currentStore);
           } catch (err) {
             setError(err.response?.data?.message || "Failed to fetch reviews.");
@@ -56,18 +53,53 @@ export default function Profile() {
       }, []);
 
 
-    async function UpdateStore()
+    async function UpdateLogin()
     {
+        storeData.at(0).store.username = username;
+        storeData.at(0).store.password = password2;
+
         try
         {
-            const response = await axios.patch("http://localhost:5028/api/Store");
-        } 
+            const response = await axios.patch("http://localhost:5028/api/Store", {
+                username: storeData.at(0)?.store?.username,
+                password: storeData.at(0)?.store?.password,
+            });
+
+            setStoreData({
+                ...storeData,
+                username: response.data.username,
+                password: response.data.password});
+        }
         catch (err)
         {
             setError(err.response?.data?.message || "Failed to fetch store.");
         }
-        
-        setStoreData(response);
+    }
+
+    async function UpdateStore()
+    {
+        storeData.at(0).store.name = storeName;
+        storeData.at(0).store.description = description;
+        storeData.at(0).store.url = url;
+
+        try
+        {
+            const response = await axios.patch("http://localhost:5028/api/Store", {
+                name: storeData.at(0)?.store?.name,
+                description: storeData.at(0)?.store?.description,
+                url: storeData.at(0)?.store?.url
+            });
+
+            setStoreData({
+                ...storeData,
+                name: response.data.name,
+                description: response.data.description,
+                url: response.data.url});
+        }
+        catch (err)
+        {
+            setError(err.response?.data?.message || "Failed to fetch store.");
+        }
     }
 
     
@@ -78,33 +110,35 @@ export default function Profile() {
             <ul> 
                 {error && <p className="error">{error}</p>}
                 {!error && (
-                    <div className="reviews-container">
+                <div className="reviews-container">
                     {reviewData.length > 0 ? (
-                        reviewData.filter((review) => review.storeId === currentStoreId)
-                        .map((review, index) => (
-                // TODO, need to route it properly /review/${review.id}: this might not correct routing
-                        <div className="review-card" key={index}>
-                        <div className="review-content">
-                            {/* Left div: Review details */}
-                            <h3>{review.customer?.name}</h3>
-                            <p><b>Store: </b>{review.store?.name}</p>
-                            <p className="rating"><b>Rating: </b>{review.rating}/5 ⭐</p>
-                            <p>{review.comment}</p>
-                        </div>
-                        <div className="review-image">
-                            {/* Right div: Image */}
-                            <img
-                            src={review.customer?.url} //TODO: URL from backend
-                            alt={`${review.customer?.name}'s picture`}
-                            />
-                        </div>
-                        </div>
-                        ))
+                    reviewData.filter((review) => review.storeId == currentStoreId)
+                    .map((review, index) => (
+                        // TODO: Route properly /customer/${review.customer.id}
+                        <Link to={`/customer/${review.customer?.id}`} key={review.id} className="link-card">
+                            <div className="review-card" key={index}>
+                                <div className="review-content">
+                                {/* Left div: Review details */}
+                                <h3>{review.customer?.name}</h3>
+                                <p><b>Store:</b> {review.store?.name}</p>
+                                <p className="rating"><b>Rating:</b> {review.rating}/5 ⭐</p>
+                                <p>{review.comment}</p>
+                                </div>
+                                <div className="review-image">
+                                {/* Right div: Image */}
+                                <img
+                                    // src="https://thispersondoesnotexist.com/" // TODO: Use the correct URL from the backend
+                                    src={review.customer?.url }
+                                    alt={`${review.customer?.name || "Customer"}'s picture`}
+                                />
+                                </div>
+                            </div>
+                        </Link>
+                    ))
                     ) : (
                     <p>No reviews found.</p>
                     )}
-                    </div>
-          
+                </div>
                 )}
             </ul>
         )
@@ -114,7 +148,7 @@ export default function Profile() {
     return (
 
         <div className='profile'>
-            <h1>{storeData.at(0)?.store?.name || "THIS WON'T WORK"}</h1>
+            <h1>{storeData.at(0)?.store?.name}</h1>
             
             <div id="store">
                 <div id="storeImgDiv">
@@ -140,7 +174,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(true); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Username</button>
                 {pressedChangeUsernameButton && (
                     <div>
-                        <form onSubmit={UpdateStore} >
+                        <form onSubmit={UpdateLogin} >
 
                             <div>
                                 <input
@@ -149,7 +183,7 @@ export default function Profile() {
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
                                     required
-                                    placeholder={currentUsername}
+                                    placeholder={"Username"}
                                 />
                             </div>
                             <button type="submit" className="user-button">
@@ -165,7 +199,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(true), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Password</button>
                 {pressedChangePasswordButton && (
                     <div>
-                        <form onSubmit={UpdateStore}>
+                        <form onSubmit={UpdateLogin}>
                             <div>
                                 <input
                                     //className="user-input"
@@ -173,7 +207,7 @@ export default function Profile() {
                                     value={password1}
                                     onChange={(e) => setPassword1(e.target.value)}
                                     required
-                                    placeholder="new password"
+                                    placeholder="New Password"
                                 />
                             </div>
                             confirm change
@@ -184,7 +218,7 @@ export default function Profile() {
                                     value={password2}
                                     onChange={(e) => setPassword2(e.target.value)}
                                     required
-                                    placeholder="confirm new password"
+                                    placeholder="Confirm New Password"
                                 />
                             </div>
                             <button type="submit" className="user-button">
@@ -209,7 +243,7 @@ export default function Profile() {
                                     value={storeName}
                                     onChange={(e) => setStoreName(e.target.value)}
                                     required
-                                    placeholder={currentStoreName}
+                                    placeholder={"Store Name"}
                                 />
                             </div>
                             <button type="submit" className="user-button">
@@ -232,7 +266,7 @@ export default function Profile() {
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     required
-                                    placeholder={currentDescription}
+                                    placeholder={"Description"}
                                 />
                             </div>
                             <button type="submit" className="user-button">
@@ -256,7 +290,7 @@ export default function Profile() {
                                     value={url}
                                     onChange={(e) => setUrl(e.target.value)}
                                     required
-                                    placeholder={currentURL}
+                                    placeholder={"URL"}
                                 />
                             </div>
                             <button type="submit" className="user-button">

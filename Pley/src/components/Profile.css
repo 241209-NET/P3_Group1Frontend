@@ -1,7 +1,7 @@
 #store {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 80%;
     background: #5eb8ed;
@@ -12,7 +12,6 @@
     color: #1e1e1e;
     transition: background 0.5s ease;
     margin-left: 2rem;
-    gap: 10rem;
 }
 
 #store:hover {

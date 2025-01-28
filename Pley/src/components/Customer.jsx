@@ -1,77 +1,58 @@
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'
+import axios from "axios";
 
 export default function Customer() {
 
-    const [reviews, setReviews] = useState([]);
-    const [error, setError] = useState("");
-    let customer = {
-        id: 1,
-        name: "Paul",
-        rating: 3.5,
-        url: "HTTPS"}
+    const { id } = useParams();
 
-   useEffect(() => {
-     const fetchReviews = async () => {
-       try {
-         // Fetch all reviews (hardcoded for now)
-         const response = await axios.get("http://localhost:5028/api/Reviews");
-         /* const response = [
-           {
-             name: "John Doe",
-             store: "Pizza Hut",
-             comment: "Excellent",
-             rating: 5,
-           },
-           {
-             name: "Jane Smith",
-             store: "McDonald",
-             comment: "Good",
-             rating: 4,
-           },
-           {
-             name: "Sam Lee",
-             store: "Taco Bell",
-             comment: "Bad",
-             rating: 2,
-           },
-           {
-             name: "Emily Davis",
-             store: "Walmart",
-             comment: "Not bad",
-             rating: 3,
-           },
-         ]; */
-         setReviews(response);
-       } catch (err) {
-         setError(err.response?.data?.message || "Failed to fetch reviews.");
-       }
-     };
-     fetchReviews();
-   }, []);
+    const [reviewData, setReviewData] = useState([]);
+    const [error, setError] = useState("");
+    const [customerData, setCustomerData] = useState([]);
+
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+          try {
+            // Fetch all reviews (hardcoded for now)
+            const response = await axios.get("http://localhost:5028/api/Reviews");
+            setReviewData(response.data)
+
+            const currentCustomer = response.data.filter((review) => review.customerId == id);
+            setCustomerData(currentCustomer);
+          } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch reviews.");
+          }
+        };
+        fetchReviews();
+      }, []);
+
 
     function DisplayCustomer()
     {
+      console.log(customerData.at(0)?.customer);
         return (
             <ul> 
                 {error && <p className="error">{error}</p>}
                 {!error && (
                     <div className="reviews-container">
-                    {reviews.length > 0 ? (
-                    reviews.map((review, index) => (
+                    {reviewData.length > 0 ? (
+                    reviewData.filter((review) => review.customerId == id)
+                          .map((review, index) => (
                         // TODO, need to route it properly /review/${review.id}: this might not correct routing
                         <div className="review-card" key={index}>
                         <div className="review-content">
                             {/* Left div: Review details */}
-                            <h3>{review.name}</h3>
-                            <p>Store: {review.store}</p>
-                            <p className="rating">Rating: {review.rating}/5 ⭐</p>
+                            <h3>{review.customer?.name}</h3>
+                            <p>Store: {review.store?.name}</p>
+                            <p className="rating">Rating: {review.customer?.avgRating}/5 ⭐</p>
                             <p>{review.comment}</p>
                         </div>
                         <div className="review-image">
                             {/* Right div: Image */}
                             <img
-                            src="https://thispersondoesnotexist.com/" //TODO: URL from backend
-                            alt={`${review.name}'s picture`}
+                            src={review.store?.url}//TODO: URL from backend
+                            alt={`${review.store?.name}'s picture`}
                             />
                         </div>
                         </div>
@@ -79,7 +60,7 @@ export default function Customer() {
                     ) : (
                     <p>No reviews found.</p>
                     )}
-                     </div>
+                  </div>
           
                 )}
             </ul>
@@ -88,20 +69,18 @@ export default function Customer() {
 
     return (
 
-        <div>Hello, this is the customer component... for now!
-
+        <div>
             <div className='profile'>
-                <h1>Store Name</h1>
+                <h1>{customerData.at(0)?.customer?.name}</h1>
             
                 <div id="customer">
                     <div id="custImgDiv">
-                        <img id="storeImg" src={customer.url} alt="" /> {/** Store image fetched from URL */}
+                        <img id="storeImg" src={customerData.at(0)?.customer?.url} alt="" /> {/** Store image fetched from URL */}
                     </div>
                     
                     <div id="info">
-                        Name: {customer.name}
                         <br />
-                        Rating: {customer.rating}
+                        Rating: {customerData.at(0)?.customer?.avgRating}
                         <br />
                     </div>
                

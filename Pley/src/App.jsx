@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 import UserProvider from './components/UserContext'; // Assuming UserProvider is exported as default from UserContext.js
 
 
@@ -25,7 +25,7 @@ export default function App() {
               {/* Add your routes here */}
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
-              <Route path={`/customer/${1}`} element={<Customer />} />
+              <Route path="/customer/:id" element={<Customer />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/customer-list" element={<CustomerList />} />
