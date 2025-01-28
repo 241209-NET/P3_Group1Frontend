@@ -124,3 +124,10 @@
         max-width: 40px;
     }
 }
+
+.link-card {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    text-decoration: none;
+}

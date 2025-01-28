@@ -62,9 +62,8 @@ function Home() {
     <div className="whole-page">
       {/* Review-card List Section */}
       <div className="homepage">
-        <h1>PLEY!</h1>
         {/* TODO: Add storeName from user at the top of page */}
-        <h2>The Reverse Yelp App</h2>
+        <h1 id="slogan">The Reverse Yelp App</h1>
         <br />
         {error && <p className="error">{error}</p>}
         {!error && (

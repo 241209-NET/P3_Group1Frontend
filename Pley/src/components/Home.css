@@ -57,6 +57,7 @@
     max-width: 40rem;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 3%;
 }
 
 .new-review-form h3 {
@@ -127,4 +128,12 @@ form {
     font-size: 1rem;
     box-sizing: border-box;
     text-align: center;
+}
+
+.homepage {
+    background-color: #fed486;
+}
+
+#slogan {
+    color: #b64300;
 }

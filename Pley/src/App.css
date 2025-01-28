@@ -1,7 +1,8 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
+  min-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
   /* background-color: #424242; */
 }
@@ -9,19 +10,14 @@
 .title {
   max-width: 100%;
   background-color: #E8E7DC;
-  border-radius: 4rem;
 }
 
 #logo-image {
-  max-width: 50%;
-  height: auto;
+  height: 200px;
   border-radius: 4rem;
+  margin: 50px 0;
 }
 
 .read-the-docs {
   color: #888;
-}
-
-.outer-div {
-  border-color: 2px solid white;
 }

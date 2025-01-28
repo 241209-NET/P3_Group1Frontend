@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./CustomerList.css";
+import { Link } from "react-router-dom";
 
 function CustomerList() {
   const [customers, setCustomers] = useState([]);
@@ -69,19 +70,29 @@ function CustomerList() {
           </tr>
         </thead>
         <tbody>
-          {customers.map((customer, index) => (
-            <tr key={index} className="customer-row">
-              <td>{customer.name}</td>
-              <td>{customer.avgRating}/5⭐</td>
-              <td>
+        {customers.map((customer, index) => (
+          <tr key={index} className="customer-row">
+            <td>
+              <Link to={`/customer/${customer?.id}`} className="link-card">
+                {customer.name}
+              </Link>
+            </td>
+            <td>
+              <Link to={`/customer/${customer?.id}`} className="link-card">
+                {customer.avgRating}/5⭐
+              </Link>
+            </td>
+            <td>
+              <Link to={`/customer/${customer?.id}`} className="link-card">
                 <img
                   src={customer.url || "https://via.placeholder.com/150"}
                   alt={`${customer.name}'s avatar`}
                   className="customer-image"
                 />
-              </td>
-            </tr>
-          ))}
+              </Link>
+            </td>
+          </tr>
+        ))}
         </tbody>
       </table>
 
