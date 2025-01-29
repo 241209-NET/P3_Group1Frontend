@@ -5,6 +5,7 @@ import './Profile.css';
 import { useParams } from 'react-router-dom'
 
 
+
 export default function Profile() {
 
     //const { logout, currentUsername } = useUserContext();
@@ -34,6 +35,8 @@ export default function Profile() {
 
     const [reviewData, setReviewData] = useState([]);
     const [storeData, setStoreData] = useState([]);
+
+
 
 
       useEffect(() => {
@@ -170,7 +173,6 @@ export default function Profile() {
             </ul>
         )
     }
-
 
     return (
 
@@ -332,11 +334,11 @@ export default function Profile() {
             </div> 
 
             <div>
-                <h2>Reviews</h2>
+                <h2 id='profile-h1'>Reviews</h2>
 
                 <DisplayAllReviews></DisplayAllReviews>
             </div>
-
+   
         </div>
 
     );
