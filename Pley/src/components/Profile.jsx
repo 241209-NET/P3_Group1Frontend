@@ -132,6 +132,11 @@ export default function Profile() {
                                     alt={`${review.customer?.name || "Customer"}'s picture`}
                                 />
                                 </div>
+                                <div className="review-delete-btn">
+                                    <button onClick={() => DeleteReview()}>
+
+                                    </button>
+                                </div>
                             </div>
                         </Link>
                     ))
