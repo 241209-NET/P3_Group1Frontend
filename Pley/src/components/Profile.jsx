@@ -11,7 +11,7 @@ export default function Profile() {
     //const { logout, currentDescription } = useUserContext();
     //const { logout, currentURL } = useUserContext();
 
-    const currentStoreId = 1;
+    const currentStoreId = 6;
     
     //for password change
     const [password1, setPassword1] = useState('');
@@ -102,6 +102,26 @@ export default function Profile() {
         }
     }
 
+    async function DeleteReview(customerId, reviewId)
+    {
+        
+        try
+        {
+            const response = await axios.delete(`http://localhost:5028/api/Customer/${customerId}/reviews/${reviewId}`);
+
+            if (response.status == 200)
+            {
+                fetchReviews();
+            }
+        }
+        catch (err)
+        {
+            setError(err.response?.data?.message || "Failed to fetch store.");
+        }
+    }
+
+
+
     
     function DisplayAllReviews()
     {
@@ -115,34 +135,39 @@ export default function Profile() {
                     reviewData.filter((review) => review.storeId == currentStoreId)
                     .map((review, index) => (
                         // TODO: Route properly /customer/${review.customer.id}
-                        <Link to={`/customer/${review.customer?.id}`} key={review.id} className="link-card">
-                            <div className="review-card" key={index}>
-                                <div className="review-content">
-                                {/* Left div: Review details */}
-                                <h3>{review.customer?.name}</h3>
-                                <p><b>Store:</b> {review.store?.name}</p>
-                                <p className="rating"><b>Rating:</b> {review.rating}/5 ⭐</p>
-                                <p>{review.comment}</p>
+                        <div className="review-items-profile">
+                            <Link to={`/customer/${review.customer?.id}`} key={review.id} className="link-card-profile">
+                                <div className="review-card-profile" key={index}>
+                                    <div className="review-content-profile">
+                                    {/* Left div: Review details */}
+                                    <h3>{review.customer?.name}</h3>
+                                    <p><b>Store:</b> {review.store?.name}</p>
+                                    <p className="rating"><b>Rating:</b> {review.rating}/5 ⭐</p>
+                                    <p>{review.comment}</p>
+                                    </div>
+                                    <div className="img-and-delete">
+                                        <div className="review-image-profile">
+                                        {/* Right div: Image */}
+                                            <img
+                                                // src="https://thispersondoesnotexist.com/" // TODO: Use the correct URL from the backend
+                                                src={review.customer?.url }
+                                                alt={`${review.customer?.name || "Customer"}'s picture`}
+                                            />
+                                        </div>
+                                        <div>
+                                            <button className="review-delete-btn" onClick={() => DeleteReview(review.customer?.id, review.id)} >Delete Review</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="review-image">
-                                {/* Right div: Image */}
-                                <img
-                                    // src="https://thispersondoesnotexist.com/" // TODO: Use the correct URL from the backend
-                                    src={review.customer?.url }
-                                    alt={`${review.customer?.name || "Customer"}'s picture`}
-                                />
-                                </div>
-                                <div className="review-delete-btn">
-                                    <button onClick={() => DeleteReview()}>
-
-                                    </button>
-                                </div>
-                            </div>
-                        </Link>
+                            </Link>
+                            
+                        </div>
                     ))
                     ) : (
                     <p>No reviews found.</p>
                     )}
+
+
                 </div>
                 )}
             </ul>
