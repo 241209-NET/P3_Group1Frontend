@@ -120,9 +120,6 @@ export default function Profile() {
         }
     }
 
-
-
-    
     function DisplayAllReviews()
     {
         //]console.log(storeData.at(0));
@@ -155,7 +152,7 @@ export default function Profile() {
                                             />
                                         </div>
                                         <div>
-                                            <button className="review-delete-btn" onClick={() => DeleteReview(review.customer?.id, review.id)} >Delete Review</button>
+                                            <button className="review-delete-btn" onClick={() => DeleteReview(review.customer?.id, review.id)}>Delete Review</button>
                                         </div>
                                     </div>
                                 </div>
