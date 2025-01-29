@@ -89,61 +89,57 @@ export default function Register() {
     <div>
       {pressedSignUp === false ? (
         <div className="user-container">
-          <h2 style={{ color: 'white' }}>Login to account</h2>
+          <h2>Login</h2>
           <form onSubmit={HandleLogin}>
             <input
-              className="user-input"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Username"
               required
             />
             <input
-              className="user-input"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               required
             />
-            <button type="submit" className="user-button">Submit</button>
+            <button type="submit">Submit</button>
           </form>
-          Don't have an account yet?
-          <button onClick={() => setPressedSignUp(!pressedSignUp)} className="user-button">
-            Create new account
+          <small>Don't have an account yet?</small>
+          <button onClick={() => setPressedSignUp(!pressedSignUp)}>
+            Create account
           </button>
         </div>
       ) : (
         <div className="user-container">
-          <h2 style={{ color: 'white' }}>Create new account</h2>
+          <h2>Create Account</h2>
           <form onSubmit={HandleSignup}>
+
             <input
-              className="user-input"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-              required
-            />
-            <input
-              className="user-input"
               value={storeName}
               onChange={(e) => setStoreName(e.target.value)}
               placeholder="Store Name"
               required
             />
             <input
-              className="user-input"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Username"
+              required
+            />
+            <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
               required
             />
-            <button type="submit" className="user-button">Submit</button>
+            <button type="submit">Submit</button>
           </form>
-          already have an account?
-          <button onClick={() => setPressedSignUp(!pressedSignUp)} className="user-button">
-            Login to old account
+          <small>already have an account?</small>
+          <button onClick={() => setPressedSignUp(!pressedSignUp)}>
+            Login
           </button>
         </div>
       )}
