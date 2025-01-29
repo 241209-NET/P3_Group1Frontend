@@ -35,7 +35,6 @@ export default function Customer() {
 
     function DisplayCustomer()
     {
-      console.log(customerData.at(0)?.customer);
         return (
             <ul> 
                 {error && <p className="error">{error}</p>}

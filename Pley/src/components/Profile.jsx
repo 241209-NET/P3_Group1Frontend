@@ -37,8 +37,6 @@ export default function Profile() {
     const [storeData, setStoreData] = useState([]);
 
 
-
-
       useEffect(() => {
         const fetchReviews = async () => {
           try {
@@ -110,19 +108,28 @@ export default function Profile() {
         
         try
         {
-            const response = await axios.delete(`http://localhost:5028/api/Customer/${customerId}/reviews/${reviewId}`);
+            const token = localStorage.getItem("authToken");
+            const response = await axios.delete(`http://localhost:5028/api/Customer/${customerId}/reviews/${reviewId}`,
+                {
+                    headers:
+                    {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
-            if (response.status == 200)
+            if (response.status == 200 || response.status == 201)
             {
                 fetchReviews();
             }
         }
         catch (err)
         {
-            setError(err.response?.data?.message || "Failed to fetch store.");
+            setError(err.response?.data?.message || "Failed to delete review.");
         }
     }
-
+    
     function DisplayAllReviews()
     {
         //]console.log(storeData.at(0));
@@ -154,12 +161,17 @@ export default function Profile() {
                                                 alt={`${review.customer?.name || "Customer"}'s picture`}
                                             />
                                         </div>
-                                        <div>
-                                            <button className="review-delete-btn" onClick={() => DeleteReview(review.customer?.id, review.id)}>Delete Review</button>
-                                        </div>
                                     </div>
                                 </div>
                             </Link>
+                            <div className="review-btns">
+                                <button className="review-edit-btn" onClick={(event) => {
+                                    event.stopPropagation();
+                                    DeleteReview(review.customerId, review.id)}}>Edit Review</button>
+                                <button className="review-delete-btn" onClick={(event) => {
+                                    event.stopPropagation();
+                                    DeleteReview(review.customerId, review.id)}}>Delete Review</button>
+                            </div>
                             
                         </div>
                     ))
