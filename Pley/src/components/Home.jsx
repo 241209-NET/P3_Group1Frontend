@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Home.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useUserContext } from "./UserContext";
 
 function Home() {
   const [reviews, setReviews] = useState([]);
@@ -9,13 +10,24 @@ function Home() {
   const [newName, setNewName] = useState("");
   const [newComment, setNewComment] = useState("");
   const [newRating, setNewRating] = useState(3);
+  const {currentUsername,  currentStorename } = useUserContext();
 
   // Fetch reviews from the API when the component loads
   useEffect(() => {
     const fetchReviews = async () => {
       try {
+        const token = localStorage.getItem("authToken");
         // Fetch all reviews
-        const response = await axios.get("http://localhost:5028/api/Reviews");
+        const response = await axios.get("http://localhost:5028/api/Reviews",
+          {
+            headers:
+            {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
         setReviews(response.data);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch reviews.");
@@ -37,13 +49,22 @@ function Home() {
     }
     const newReview = {
       name: newName,
-      // store: store_name, // TODO: Handle getting the store name from user credentials
+      store: currentStorename,
       comment: newComment,
       rating: newRating,
     };
 
     try {
-      const response = await axios.post("http://localhost:5028/api/Reviews", newReview);
+      const token = localStorage.getItem("authToken");
+      const response = await axios.post("http://localhost:5028/api/Reviews" ,newReview,
+        {
+          headers:
+          {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       //response will be 200 if Ok (might be 201)
       if (response.status === 200) {
         // Add the new review to the top of the current list

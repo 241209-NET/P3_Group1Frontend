@@ -27,6 +27,9 @@ export default function Register() {
 
       if (response.status === 200 && response.data) {
         const retrievedStore = response.data;
+        const token = response.data.token;
+        localStorage.setItem("authToken", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         logout();
         login(retrievedStore);
         alert('Logged in successfully!');
