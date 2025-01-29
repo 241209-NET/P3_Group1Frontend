@@ -103,3 +103,7 @@ button:hover {
     height: 50%;
     border-radius: 0.5rem;
 }
+
+#profile-h1 {
+    color: #b64300;
+}

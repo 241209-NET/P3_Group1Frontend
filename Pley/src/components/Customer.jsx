@@ -71,18 +71,21 @@ export default function Customer() {
 
         <div>
             <div className='profile'>
-                <h1>{customerData.at(0)?.customer?.name}</h1>
+                <div id='costomer-profile'>
+                    <h2 >{customerData.at(0)?.customer?.name} ({customerData.at(0)?.customer?.avgRating}/5)</h2>
+                </div>
+                
             
                 <div id="customer">
                     <div id="custImgDiv">
                         <img id="storeImg" src={customerData.at(0)?.customer?.url} alt="" /> {/** Store image fetched from URL */}
                     </div>
-                    
+{/*                     
                     <div id="info">
                         <br />
                         Rating: {customerData.at(0)?.customer?.avgRating}
                         <br />
-                    </div>
+                    </div> */}
                
                 </div>
 

@@ -16,7 +16,7 @@ function Home() {
       try {
         // Fetch all reviews
         const response = await axios.get("http://localhost:5028/api/Reviews");
-        setReviews(response.data); // Correctly handle API response
+        setReviews(response.data);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch reviews.");
       }
@@ -62,9 +62,8 @@ function Home() {
     <div className="whole-page">
       {/* Review-card List Section */}
       <div className="homepage">
-        <h1>PLEY!</h1>
         {/* TODO: Add storeName from user at the top of page */}
-        <h2>The Reverse Yelp App</h2>
+        <h1 id="slogan">The Reverse Yelp App</h1>
         <br />
         {error && <p className="error">{error}</p>}
         {!error && (
@@ -135,10 +134,6 @@ function Home() {
           </button>
         </form>
       </div>
-
-      <Link to="/customer-list">
-        <button>Go to Customer List</button>
-      </Link>
     </div>
   );
 }

@@ -1,77 +1,49 @@
-.user-button {
+.user-button { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin: auto; 
+    background-color: orange; 
+    color: white; 
+} 
 
-    background-color: white;
+.user-container { 
+    margin-top: 20%;
+    position: relative; 
+    top: 50%; 
+    left: 50%; 
+    transform: 
+    translate(-50%, -50%); 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    gap: 10px; 
+    background-color: orangered; 
+    color: rgb(255, 255, 255); 
+    z-index: 1; 
+    width: 300px; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+} 
 
-}
+form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; /* Adds spacing between inputs and button inside the form */ 
+    width: 100%; /* Ensures inputs/buttons span the full width of the container */ 
+} 
 
-.user-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.user-input { /* Styles for input fields */ 
+    font-size: 20px; 
+} 
     
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    border: 5.0px solid orangered;
-    background-color: orange;
-    z-index: 1;
-    height: 300px;
-    width: 300px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
-.user-input {
-    animation: slideIn 0.5s ease forwards;
-    font-size: 20px;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.user-input:focus {
-    transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.user-button {
-    background-color: orangered;
-    color: yellow;
-    height: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-}
-
-.change-button {
-    all: unset;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    text-decoration: underline;
-    display: flex;
-    font-weight: bold;
-    justify-content: center;
-}
-
-.change-register {
-    width: 250px;
-    height: 300px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-
+    
+.user-button { 
+    height: 25px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin: auto; 
 }
