@@ -39,6 +39,7 @@ export default function Profile() {
     const [reviewData, setReviewData] = useState([]);
     const [storeData, setStoreData] = useState([]);
     const [storeInfo, setStoreInfo] = useState([]);
+    const [updateStoreInfo, setUpdateStoreInfo] = useState([]);
 
     
       useEffect(() => {
@@ -59,16 +60,16 @@ export default function Profile() {
 
       useEffect(() => {
         const fetchStores = async () => {
-          try {
-            // Fetch all reviews (hardcoded for now)
-            const response = await axios.get(`http://localhost:5028/api/Stores/${currentStoreId}`);
-            setStoreInfo(response.data);
-          } catch (err) {
-            setError(err.response?.data?.message || "Failed to load store info.");
-          }
-        };
+            try {
+                // Fetch all reviews (hardcoded for now)
+                const response = await axios.get(`http://localhost:5028/api/Stores/${currentStoreId}`);
+                setStoreInfo(response.data);
+              } catch (err) {
+                setError(err.response?.data?.message || "Failed to load store info.");
+              }
+          };
         fetchStores();
-      }, [storeInfo]);
+      }, []);
   
       async function GetAllReviews()
       {
@@ -117,7 +118,6 @@ export default function Profile() {
     async function UpdateStore(event)
     {
         event.preventDefault();
-
         try
         {
             const token = localStorage.getItem('currentToken');
@@ -140,6 +140,8 @@ export default function Profile() {
                 name: response.data.name,
                 description: response.data.description,
                 url: response.data.url});
+
+            setStoreInfo(response.data);
         }
         catch (err)
         {
