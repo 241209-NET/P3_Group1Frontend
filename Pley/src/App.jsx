@@ -4,7 +4,7 @@ import UserProvider from './components/UserContext'; // Assuming UserProvider is
 
 import Customer from './components/Customer';
 import Home from './components/Home';
-import NavBar from './components/NavBar';
+import NavBar from './components/NavBar.jsx';
 
 import Profile from './components/Profile';
 import Register from './components/Register';
