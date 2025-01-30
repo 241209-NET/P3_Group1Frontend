@@ -36,6 +36,7 @@ export default function Profile() {
 
     const [reviewData, setReviewData] = useState([]);
     const [storeData, setStoreData] = useState([]);
+    const [storeInfo, setStoreInfo] = useState([]);
 
     
       useEffect(() => {
@@ -52,6 +53,19 @@ export default function Profile() {
           }
         };
         fetchReviews();
+      }, []);
+
+      useEffect(() => {
+        const fetchStores = async () => {
+          try {
+            // Fetch all reviews (hardcoded for now)
+            const response = await axios.get(`http://localhost:5028/api/Stores/${currentStoreId}`);
+            setStoreInfo(response.data);
+          } catch (err) {
+            setError(err.response?.data?.message || "Failed to load store info.");
+          }
+        };
+        fetchStores();
       }, []);
 
 
@@ -197,22 +211,22 @@ export default function Profile() {
     return (
 
         <div className='profile'>
-            <h1 id='profile-h1'>{storeData.at(0)?.store?.name}</h1>
+            <h1 id='profile-h1'>{storeInfo.name}</h1>
             
             <div id="store">
                 <div id="storeImgDiv">
-                    <img id="storeImg" src={`${storeData.at(0)?.store?.url}`} alt="" /> {/** Store image fetched from URL */}
+                    <img id="storeImg" src={`${storeInfo.url}`} alt="" /> {/** Store image fetched from URL */}
                 </div>
                 
                 <div id="info">
                     <p>
-                        <b>Username: </b> {storeData.at(0)?.store?.username}
+                        <b>Username: </b> {storeInfo.username}
                         <br />
-                        <b>Store Name: </b> {storeData.at(0)?.store?.name}
+                        <b>Store Name: </b> {storeInfo.name}
                         <br />
-                        <b>Desc: </b> {storeData.at(0)?.store?.description}
+                        <b>Desc: </b> {storeInfo.description}
                         <br />
-                        <b>URL: </b> {storeData.at(0)?.store?.url}
+                        <b>URL: </b> {storeInfo.url}
                     </p>
 
                 </div>

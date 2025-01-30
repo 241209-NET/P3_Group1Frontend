@@ -14,7 +14,8 @@ export default function Customer() {
     const [newName, setNewName] = useState("");
     const [newComment, setNewComment] = useState("");
     const [newRating, setNewRating] = useState(3);
-    const {currentUsername,  currentStorename } = useUserContext();
+    const { currentStorename } = useUserContext();
+    const [customerInfo, setCustomerInfo] = useState([]);
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -31,6 +32,18 @@ export default function Customer() {
         };
         fetchReviews();
       }, []);
+
+    useEffect(() => {
+        const fetchCusomerInfo = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5028/api/Customers/${id}`);
+                setCustomerInfo(response.data);
+            } catch (err) {
+                setError(err.response?.data?.message || "Failed to fetch customer info.");
+            }
+        }
+        fetchCusomerInfo();
+    },[]);
 
 
     function DisplayCustomer()
@@ -119,13 +132,13 @@ export default function Customer() {
         <div>
             <div className='profile'>
                 <div id='costomer-profile'>
-                    <h2 >{customerData.at(0)?.customer?.name} ({customerData.at(0)?.customer?.avgRating}/5)</h2>
+                    <h2 >{customerInfo?.name} ({customerInfo?.avgRating}/5)</h2>
                 </div>
                 
             
                 <div id="customer">
                     <div id="custImgDiv">
-                        <img id="storeImg" src={customerData.at(0)?.customer?.url} alt="" /> {/** Store image fetched from URL */}
+                        <img id="storeImg" src={customerInfo?.url} alt="" /> {/** Store image fetched from URL */}
                     </div>
 {/*                     
                     <div id="info">
