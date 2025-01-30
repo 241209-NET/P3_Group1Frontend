@@ -48,7 +48,7 @@ export default function UserProvider({ children }) {
 
         //localStorage.setItem("currentToken", store.token);
 
-        axios.defaults.headers.common["Authorization"] = `Bearer ${store.token}`;
+        axios.defaults.headers.common["Authorization"] = `${store.token}`;
     }
 
     // Logout function to clear user data

@@ -21,20 +21,18 @@ export default function NavBar() {
       {currentToken === null ? (
         // Links to show when no user is logged in
         <>
-          <Link to="/home" className="nav-link">Home</Link>
-          <Link to="/customer-list" className="nav-link">Customer List</Link>
-          <Link to="/register" className="nav-link">Register</Link>
+          <Link to="/home" className="nav-link"><FaHome className='my-icon'/>  Home</Link>
+          <Link to="/customer-list" className="nav-link"><FaThList className='my-icon'/>  Customer List</Link>
+          <Link to="/register" className="nav-link"><MdAccountCircle className='my-icon'/>  Register/Login</Link>
           
         </>
       ) : (
         <>
           <Link to="/home" className="nav-link"><FaHome className='my-icon'/>  Home</Link>
           <Link to="/customer-list" className="nav-link"><FaThList className='my-icon'/>  Customer List</Link>
-          <Link to="/home" className="nav-link">Home</Link>
-          <Link to="/customer-list" className="nav-link">Customer List</Link>
-          <Link to="/profile" className="nav-link">Profile</Link>
+          <Link to="/profile" className="nav-link"><IoStorefront className='my-icon'/>  Profile</Link>
           <Link to="/home">
-            <button onClick={logout}>logout?</button>
+            <button onClick={logout}><IoLogOut className='my-icon'/>logout?</button>
           </Link>
         </>
         

@@ -38,7 +38,6 @@ export default function Profile() {
     const [storeData, setStoreData] = useState([]);
 
     
-
       useEffect(() => {
         const fetchReviews = async () => {
           try {
@@ -110,7 +109,7 @@ export default function Profile() {
         
         try
         {
-            const token = localStorage.getItem("authToken");
+            const token = localStorage.getItem('currentToken');
             const response = await axios.delete(`http://localhost:5028/api/Customers/${customerId}/reviews/${reviewId}`,
                 {
                     headers:
@@ -120,11 +119,18 @@ export default function Profile() {
                     },
                 }
             );
+            // fetchReviews(); TODO!!!
+            try {
+                // Fetch all reviews (hardcoded for now)
+                const response = await axios.get("http://localhost:5028/api/Reviews");
+                setReviewData(response.data)
+    
+                const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
+                setStoreData(currentStore);
+              } catch (err) {
+                setError(err.response?.data?.message || "Failed to fetch reviews.");
+              }
 
-            if (response.status == 200 || response.status == 201)
-            {
-                fetchReviews();
-            }
         }
         catch (err)
         {
@@ -144,9 +150,9 @@ export default function Profile() {
                     reviewData.filter((review) => review.storeId == currentStoreId)
                     .map((review, index) => (
                         // TODO: Route properly /customer/${review.customer.id}
-                        <div className="review-items-profile">
-                            <Link to={`/customer/${review.customer?.id}`} key={review.id} className="link-card-profile">
-                                <div className="review-card-profile" key={index}>
+                        <div className="review-items-profile" key={index}>
+                            <Link to={`/customer/${review.customer?.id}`} className="link-card-profile">
+                                <div className="review-card-profile" >
                                     <div className="review-content-profile">
                                     {/* Left div: Review details */}
                                     <h3>{review.customer?.name}</h3>

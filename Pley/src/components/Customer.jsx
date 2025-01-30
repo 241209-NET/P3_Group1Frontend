@@ -86,14 +86,17 @@ export default function Customer() {
         };
 
         try {
-        const token = localStorage.getItem("authToken");
+        const token = localStorage.getItem('currentToken');
         const response = await axios.post(`http://localhost:5028/api/Customers/${id}/reviews` ,newReview,
             {
-            headers:
-            {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
+                headers:
+                {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             },
+            {
+                withCredentials: true
             }
         );
         //response will be 200 if Ok (might be 201)

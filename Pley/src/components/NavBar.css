@@ -16,9 +16,14 @@
 
 .navBar button {
 
-    background-color: orangered;
+    background-color: rgb(234 4 4);
     color: white;
+    transition: background 0.5s ease;
+}
 
+.navBar button:hover {
+
+    background-color: rgb(234 4 4);
 }
 
 .nav-link {
