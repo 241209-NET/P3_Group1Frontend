@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from "axios";
 import './Profile.css';
 import { useParams } from 'react-router-dom'
+import { useUserContext } from './UserContext';
 
 
 
@@ -12,7 +13,7 @@ export default function Profile() {
     //const { logout, currentDescription } = useUserContext();
     //const { logout, currentURL } = useUserContext();
 
-    const currentStoreId = 6;
+    const { currentStoreId } = useUserContext();
     
     //for password change
     const [password1, setPassword1] = useState('');
