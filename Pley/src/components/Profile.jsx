@@ -24,6 +24,7 @@ export default function Profile() {
     const [storeName, setStoreName] = useState('');
     const [description, setDescription] = useState('');
     const [url, setUrl] = useState('');
+    const [reviewMessage, setReviewMessage] = useState('');
 
 
     const [error, setError] = useState("");
@@ -33,6 +34,7 @@ export default function Profile() {
     const [pressedChangeStoreNameButton, setPressedChangeStoreNameButton] = useState(false);
     const [pressedChangeDescButton, setPressedChangeDescButton] = useState(false);
     const [pressedChangeUrlButton, setPressedChangeUrlButton] = useState(false);
+    const [pressedUpdateReviewButton, setPressedUpdateReviewButton] = useState(false);
 
     const [reviewData, setReviewData] = useState([]);
     const [storeData, setStoreData] = useState([]);
@@ -53,6 +55,20 @@ export default function Profile() {
         };
         fetchReviews();
       }, []);
+
+      async function GetAllReviews()
+      {
+        try {
+            // Fetch all reviews (hardcoded for now)
+            const response = await axios.get("http://localhost:5028/api/Reviews");
+            setReviewData(response.data)
+
+            const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
+            setStoreData(currentStore);
+          } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch reviews.");
+          }
+      }
 
 
     async function UpdateLogin()
@@ -104,6 +120,30 @@ export default function Profile() {
         }
     }
 
+
+    async function UpdateReview(customerId, reviewId)
+    {
+        try
+        {
+            const token = localStorage.getItem('currentToken');
+            const response = await axios.patch(`http://localhost:5028/api/Customers/${customerId}/reviews/${reviewId}`, reviewMessage,
+                {
+                    headers:
+                    {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            GetAllReviews();
+
+        }
+        catch(err)
+        {
+            setError(err.response?.data?.message || "Failed to fetch store.");
+        }
+    }
     async function DeleteReview(customerId, reviewId)
     {
         
@@ -119,17 +159,7 @@ export default function Profile() {
                     },
                 }
             );
-            // fetchReviews(); TODO!!!
-            try {
-                // Fetch all reviews (hardcoded for now)
-                const response = await axios.get("http://localhost:5028/api/Reviews");
-                setReviewData(response.data)
-    
-                const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
-                setStoreData(currentStore);
-              } catch (err) {
-                setError(err.response?.data?.message || "Failed to fetch reviews.");
-              }
+            GetAllReviews();
 
         }
         catch (err)
@@ -175,7 +205,26 @@ export default function Profile() {
                             <div className="review-btns">
                                 <button className="review-edit-btn" onClick={(event) => {
                                     event.stopPropagation();
-                                    DeleteReview(review.customerId, review.id)}}>Edit Review</button>
+                                    setPressedUpdateReviewButton(true)}}>Edit Review</button>
+                                {pressedUpdateReviewButton && (
+                                    <div>
+                                        <form onSubmit="UpdateReview(review.customerId, review.id)">
+                                            <div>
+                                                <textarea
+                                                    //className="user-input"
+                                                    value={reviewMessage}
+                                                    onChange={(e) => setReviewMessage(e.target.value)}
+                                                    placeholder={"Review"}
+                                                />
+                                            </div>
+                                            <button type="submit" className="user-button">
+                                                Submit
+                                            </button>
+                                            <button onClick={() => setPressedUpdateReviewButton(false)}>Cancel</button>
+
+                                        </form>
+                                    </div>
+                                )}
                                 <button className="review-delete-btn" onClick={(event) => {
                                     event.stopPropagation();
                                     DeleteReview(review.customerId, review.id)}}>Delete Review</button>

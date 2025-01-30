@@ -33,7 +33,6 @@ export default function Register() {
         const retrievedStore = response.data;
         
         logout();
-        console.log(retrievedStore);
         login(retrievedStore);
         alert('Logged in successfully!');
         navigate('/home');
