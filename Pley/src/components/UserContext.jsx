@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const UserContext = createContext();
-const baseURL = "http://localhost:5028";
+const baseURL = "https://pleyapi-fsaxgge9gda2f5g3.eastus2-01.azurewebsites.net";
 
 export const useUserContext = () => useContext(UserContext);
 
