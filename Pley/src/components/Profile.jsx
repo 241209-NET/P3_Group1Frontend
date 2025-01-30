@@ -36,6 +36,7 @@ export default function Profile() {
     const [reviewData, setReviewData] = useState([]);
     const [storeData, setStoreData] = useState([]);
 
+    
 
       useEffect(() => {
         const fetchReviews = async () => {
