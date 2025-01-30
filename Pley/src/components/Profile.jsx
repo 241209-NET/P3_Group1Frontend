@@ -109,7 +109,7 @@ export default function Profile() {
         try
         {
             const token = localStorage.getItem("authToken");
-            const response = await axios.delete(`http://localhost:5028/api/Customer/${customerId}/reviews/${reviewId}`,
+            const response = await axios.delete(`http://localhost:5028/api/Customers/${customerId}/reviews/${reviewId}`,
                 {
                     headers:
                     {
