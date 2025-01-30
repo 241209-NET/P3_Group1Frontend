@@ -27,7 +27,7 @@ export default function NavBar() {
           <Link to="/home" className="nav-link">Home</Link>
           <Link to="/customer" className="nav-link">Customer</Link>
           <Link to="/profile" className="nav-link">Profile</Link>
-          <button onClick={{logout}}>logout?</button>
+          <button onClick={logout}>logout?</button>
         </>
         
       )}
