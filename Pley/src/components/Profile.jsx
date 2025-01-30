@@ -13,7 +13,7 @@ export default function Profile() {
     //const { logout, currentDescription } = useUserContext();
     //const { logout, currentURL } = useUserContext();
 
-    const currentStoreId = useUserContext();
+    const { currentStoreId } = useUserContext();
     
     //for password change
     const [password1, setPassword1] = useState('');
