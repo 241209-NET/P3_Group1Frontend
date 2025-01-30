@@ -2,10 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'
 import axios from "axios";
 import { useUserContext } from "./UserContext";
+import './Customer.css';
 
 export default function Customer() {
 
     const { id } = useParams();
+    const {currentURL} = useUserContext();
 
     const [reviewData, setReviewData] = useState([]);
     const [error, setError] = useState("");
@@ -21,7 +23,7 @@ export default function Customer() {
         const fetchReviews = async () => {
           try {
             // Fetch all reviews (hardcoded for now)
-            const response = await axios.get("http://localhost:5028/api/Reviews");
+            const response = await axios.get(`${currentURL}/api/Reviews`);
             setReviewData(response.data)
 
             const currentCustomer = response.data.filter((review) => review.customerId == id);
@@ -36,7 +38,7 @@ export default function Customer() {
     useEffect(() => {
         const fetchCusomerInfo = async () => {
             try {
-                const response = await axios.get(`http://localhost:5028/api/Customers/${id}`);
+                const response = await axios.get(`${currentURL}/api/Customers/${id}`);
                 setCustomerInfo(response.data);
             } catch (err) {
                 setError(err.response?.data?.message || "Failed to fetch customer info.");
@@ -100,7 +102,7 @@ export default function Customer() {
 
         try {
         const token = localStorage.getItem('currentToken');
-        const response = await axios.post(`http://localhost:5028/api/Customers/${id}/reviews` ,newReview,
+        const response = await axios.post(`${currentURL}/api/Customers/${id}/reviews` ,newReview,
             {
                 headers:
                 {

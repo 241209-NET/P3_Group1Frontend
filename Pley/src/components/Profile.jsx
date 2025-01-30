@@ -13,7 +13,7 @@ export default function Profile() {
     //const { logout, currentDescription } = useUserContext();
     //const { logout, currentURL } = useUserContext();
 
-    const { currentStoreId } = useUserContext();
+    const { currentStoreId, currentURL } = useUserContext();
     
     //for password change
     const [password1, setPassword1] = useState('');
@@ -39,14 +39,13 @@ export default function Profile() {
     const [reviewData, setReviewData] = useState([]);
     const [storeData, setStoreData] = useState([]);
     const [storeInfo, setStoreInfo] = useState([]);
-    const [updateStoreInfo, setUpdateStoreInfo] = useState([]);
 
     
       useEffect(() => {
         const fetchReviews = async () => {
           try {
             // Fetch all reviews (hardcoded for now)
-            const response = await axios.get("http://localhost:5028/api/Reviews");
+            const response = await axios.get(`${currentURL}/api/Reviews`);
             setReviewData(response.data)
 
             const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
@@ -62,7 +61,7 @@ export default function Profile() {
         const fetchStores = async () => {
             try {
                 // Fetch all reviews (hardcoded for now)
-                const response = await axios.get(`http://localhost:5028/api/Stores/${currentStoreId}`);
+                const response = await axios.get(`${currentURL}/api/Stores/${currentStoreId}`);
                 setStoreInfo(response.data);
               } catch (err) {
                 setError(err.response?.data?.message || "Failed to load store info.");
@@ -75,7 +74,7 @@ export default function Profile() {
       {
         try {
             // Fetch all reviews (hardcoded for now)
-            const response = await axios.get("http://localhost:5028/api/Reviews");
+            const response = await axios.get(`${currentURL}/api/Reviews`);
             setReviewData(response.data)
 
             const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
@@ -92,7 +91,7 @@ export default function Profile() {
         try
         {
             const token = localStorage.getItem('currentToken');
-            const response = await axios.patch("http://localhost:5028/api/Account/login/edit", {
+            const response = await axios.patch(`${currentURL}/api/Account/login/edit`, {
                 username: username,
                 password: password2,
             },
@@ -108,6 +107,8 @@ export default function Profile() {
                 ...storeData,
                 username: response.data.username,
                 password: response.data.password});
+
+            setStoreInfo(response.data);
         }
         catch (err)
         {
@@ -121,7 +122,7 @@ export default function Profile() {
         try
         {
             const token = localStorage.getItem('currentToken');
-            const response = await axios.patch(`http://localhost:5028/api/Stores/${currentStoreId}`,
+            const response = await axios.patch(`${currentURL}/api/Stores/${currentStoreId}`,
                 {
                     name: storeName,
                     description: description,
@@ -157,7 +158,7 @@ export default function Profile() {
         try
         {
             const token = localStorage.getItem('currentToken');
-            const response = await axios.patch(`http://localhost:5028/api/Customers/${customerId}/reviews/${reviewId}`,
+            const response = await axios.patch(`${currentURL}/api/Customers/${customerId}/reviews/${reviewId}`,
                 {
 
                     comment: reviewMessage
@@ -186,7 +187,7 @@ export default function Profile() {
         try
         {
             const token = localStorage.getItem('currentToken');
-            const response = await axios.delete(`http://localhost:5028/api/Customers/${customerId}/reviews/${reviewId}`,
+            const response = await axios.delete(`${currentURL}/api/Customers/${customerId}/reviews/${reviewId}`,
                 {
                     headers:
                     {

@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const UserContext = createContext();
+const baseURL = "http://localhost:5028";
 
 export const useUserContext = () => useContext(UserContext);
 
@@ -22,6 +23,10 @@ export default function UserProvider({ children }) {
 
     const [currentStoreName, setCurrentStoreName] = useState(() => {
         return localStorage.getItem('currentStoreName') || null;
+    });
+
+    const [currentURL, setCurrentURL] = useState(() => {
+        return baseURL;
     });
 
     // Sync state values with localStorage when they change
@@ -69,7 +74,7 @@ export default function UserProvider({ children }) {
     }
 
     return (
-        <UserContext.Provider value={{ currentStoreId, currentUsername, currentStoreName, currentToken, login, logout }}>
+        <UserContext.Provider value={{ currentStoreId, currentUsername, currentStoreName, currentToken, currentURL, login, logout }}>
             {children}
         </UserContext.Provider>
     );

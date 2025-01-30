@@ -7,6 +7,7 @@ import { useUserContext } from "./UserContext";
 function Home() {
   const [reviews, setReviews] = useState([]);
   const [error, setError] = useState("");
+  const {currentURL} = useUserContext();
 
   // Fetch reviews from the API when the component loads
   useEffect(() => {
@@ -14,7 +15,7 @@ function Home() {
       try {
         const token = localStorage.getItem("authToken");
         // Fetch all reviews
-        const response = await axios.get("http://localhost:5028/api/Reviews",
+        const response = await axios.get(`${currentURL}/api/Reviews`,
           {
             headers:
             {

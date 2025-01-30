@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./CustomerList.css";
 import { Link } from "react-router-dom";
+import { useUserContext } from './UserContext';
 
 function CustomerList() {
   const [customers, setCustomers] = useState([]);
   const [sortOrder, setSortOrder] = useState("name"); // "name", "rating-asc", "rating-desc"
+  const {currentURL} = useUserContext();
 
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await axios.get("http://localhost:5028/api/Customers");
+        const response = await axios.get(`${currentURL}/api/Customers`);
         setCustomers(response.data);
       } catch (error) {
         console.error("Error fetching customers:", error);

@@ -6,7 +6,7 @@ import axios from 'axios';
 import './Register.css';
 
 export default function Register() {
-  const { login, logout } = useUserContext();
+  const { login, logout, currentURL } = useUserContext();
   const [username, setUsername] = useState('');
   const [storeName, setStoreName] = useState('');
   const [password, setPassword] = useState('');
@@ -26,7 +26,7 @@ export default function Register() {
     //}
 
     try {
-      const response = await axios.post('http://localhost:5028/api/Account/login', { username, password });
+      const response = await axios.post(`${currentURL}/api/Account/login`, { username, password });
 
       if (response.status === 200 && response.data?.token) {
        
@@ -51,7 +51,7 @@ export default function Register() {
 
   async function addStore(store) {
     try {
-      const response = await axios.post('http://localhost:5028/api/Account/register', store, {
+      const response = await axios.post(`${currentURL}/api/Account/register`, store, {
         headers: { 'Content-Type': 'application/json' },
       });
 
