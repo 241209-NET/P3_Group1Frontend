@@ -14,6 +14,13 @@
     z-index: 1;
 }
 
+.navBar button {
+
+    background-color: orangered;
+    color: white;
+
+}
+
 .nav-link {
     text-decoration: none;
     color: #E8E7DC;

@@ -13,20 +13,26 @@ export default function Register() {
   const [pressedSignUp, setPressedSignUp] = useState(false);
   const navigate = useNavigate();
 
+  //let token = null;
+
   async function HandleLogin(event) {
+    
     event.preventDefault();
 
-    if (username === "gamestop1" && password === "password") {
-      const store = { storeId: 1, username, name: "gamestop" };
-      alert('Logged in successfully!');
-      return;
-    }
+    //if (username === "gamestop1" && password === "password") {
+      //const store = { storeId: 1, username, name: "gamestop" };
+      //alert('Logged in successfully!');
+      //return;
+    //}
 
     try {
       const response = await axios.post('http://localhost:5028/api/Stores/login', { username, password });
 
-      if (response.status === 200 && response.data) {
+      if (response.status === 200 && response.data?.token) {
+       
         const retrievedStore = response.data;
+        //const token = response.data.token; 
+        //axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         logout();
         login(retrievedStore);
         alert('Logged in successfully!');
@@ -49,8 +55,15 @@ export default function Register() {
       const response = await axios.post('http://localhost:5028/api/Stores/register', store, {
         headers: { 'Content-Type': 'application/json' },
       });
-      logout();
-      login(response.data);
+      
+      if (response.status === 200 && response.data?.token) {
+
+        logout();
+        login(response.data);
+
+      }
+
+
     } catch (error) {
       if (error.response) {
         console.error('Error response data:', error.response.data);
