@@ -8,7 +8,6 @@ import './Profile';
 import { useUserContext } from './UserContext';
 
 export default function NavBar() {
-  let currentUserId = 1; // Initialize state for current user ID
   
   const { currentStoreId, setCurrentStoreId, currentToken, logout } = useUserContext()
 

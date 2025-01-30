@@ -31,8 +31,7 @@ export default function Register() {
       if (response.status === 200 && response.data?.token) {
        
         const retrievedStore = response.data;
-        //const token = response.data.token; 
-        //axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        
         logout();
         login(retrievedStore);
         alert('Logged in successfully!');
@@ -52,6 +51,7 @@ export default function Register() {
 
   async function addStore(store) {
     try {
+      
       const response = await axios.post('http://localhost:5028/api/Stores/register', store, {
         headers: { 'Content-Type': 'application/json' },
       });
@@ -65,15 +65,23 @@ export default function Register() {
 
 
     } catch (error) {
+      
       if (error.response) {
+
         console.error('Error response data:', error.response.data);
         if (error.response.status === 400) {
+
           console.error('Error 400:', error.response.data);
+
         }
       } else {
+
         console.error('Error adding user:', error);
+
       }
+      
     }
+
   }
 
   function isValidPassword(password) {

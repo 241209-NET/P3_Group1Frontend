@@ -75,10 +75,11 @@ button:hover {
     align-items: center;
 }
 
-.review-card {
+.review-card-profile {
     display: flex;
+    justify-content: space-between;
+    flex-direction: row;
     align-items: center;
-    width: 60%;
     border-radius: 1rem;
     padding: 1rem;
     background: #5eb8ed;
@@ -86,24 +87,71 @@ button:hover {
     margin-bottom: 1rem;
     color: black;
     transition: background 0.5s ease;
+    max-width: 100%;
+    min-height: 100%;
 }
 
-.review-content {
+.review-content-profile {
     padding-right: 1rem;
     width: 40%;
     padding-left: 10%;
 }
 
-.review-image{
+.review-image-profile{
     max-width: 40%;
+    bottom: 0;
 }
 
-.review-image img {
-    max-width: 50%;
-    height: 50%;
+.review-image-profile img {
+    max-width: 100%;
+    height: auto;
     border-radius: 0.5rem;
+    justify-content: space-evenly;
+    gap: 2rem;
 }
 
-#profile-h1 {
-    color: #b64300;
+.img-and-delete
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.review-delete-btn
+{
+    color: black;
+    background: #f02424bc;
+    font-weight: normal;
+    font-size: 90%;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin: 0.5rem;
+    transition: background 0.5s ease;
+    height: 1rem;
+    width: 8rem;
+    white-space: nowrap;
+    line-height: 0.2rem;
+
+}
+
+.review-delete-btn:hover
+{
+    background:#ff0000;
+}
+
+.link-card-profile
+{
+    display: flex;
+    max-width: 100%;
+    align-items: center;
+}
+
+.review-items-profile
+{
+    display: flex;
+    max-width: 50%;
+    align-items: center;
 }
