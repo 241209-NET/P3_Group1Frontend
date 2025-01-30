@@ -34,7 +34,7 @@ export default function Profile() {
     const [pressedChangeStoreNameButton, setPressedChangeStoreNameButton] = useState(false);
     const [pressedChangeDescButton, setPressedChangeDescButton] = useState(false);
     const [pressedChangeUrlButton, setPressedChangeUrlButton] = useState(false);
-    const [pressedUpdateReviewButton, setPressedUpdateReviewButton] = useState(false);
+    const [pressedUpdateReviewButton, setPressedUpdateReviewButton] = useState(null);
 
     const [reviewData, setReviewData] = useState([]);
     const [storeData, setStoreData] = useState([]);
@@ -68,7 +68,7 @@ export default function Profile() {
           }
         };
         fetchStores();
-      }, []);
+      }, [storeInfo]);
   
       async function GetAllReviews()
       {
@@ -85,16 +85,22 @@ export default function Profile() {
       }
 
 
-    async function UpdateLogin()
+    async function UpdateLogin(event)
     {
-        storeData.at(0).store.username = username;
-        storeData.at(0).store.password = password2;
-
+        event.preventDefault()
         try
         {
-            const response = await axios.patch("http://localhost:5028/api/Store", {
-                username: storeData.at(0)?.store?.username,
-                password: storeData.at(0)?.store?.password,
+            const token = localStorage.getItem('currentToken');
+            const response = await axios.patch("http://localhost:5028/api/Account/login/edit", {
+                username: username,
+                password: password2,
+            },
+            {
+                headers:
+                {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
             });
 
             setStoreData({
@@ -108,19 +114,26 @@ export default function Profile() {
         }
     }
 
-    async function UpdateStore()
+    async function UpdateStore(event)
     {
-        storeData.at(0).store.name = storeName;
-        storeData.at(0).store.description = description;
-        storeData.at(0).store.url = url;
+        event.preventDefault();
 
         try
         {
-            const response = await axios.patch("http://localhost:5028/api/Store", {
-                name: storeData.at(0)?.store?.name,
-                description: storeData.at(0)?.store?.description,
-                url: storeData.at(0)?.store?.url
-            });
+            const token = localStorage.getItem('currentToken');
+            const response = await axios.patch(`http://localhost:5028/api/Stores/${currentStoreId}`,
+                {
+                    name: storeName,
+                    description: description,
+                    url: url
+                },
+                {
+                    headers:
+                    {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
 
             setStoreData({
                 ...storeData,
@@ -135,12 +148,18 @@ export default function Profile() {
     }
 
 
-    async function UpdateReview(customerId, reviewId)
+    async function UpdateReview(event, customerId, reviewId)
     {
+        event.preventDefault();
+
         try
         {
             const token = localStorage.getItem('currentToken');
-            const response = await axios.patch(`http://localhost:5028/api/Customers/${customerId}/reviews/${reviewId}`, reviewMessage,
+            const response = await axios.patch(`http://localhost:5028/api/Customers/${customerId}/reviews/${reviewId}`,
+                {
+
+                    comment: reviewMessage
+                },
                 {
                     headers:
                     {
@@ -158,6 +177,7 @@ export default function Profile() {
             setError(err.response?.data?.message || "Failed to fetch store.");
         }
     }
+    
     async function DeleteReview(customerId, reviewId)
     {
         
@@ -182,80 +202,6 @@ export default function Profile() {
         }
     }
     
-    function DisplayAllReviews()
-    {
-        //]console.log(storeData.at(0));
-        return (
-            <ul> 
-                {error && <p className="error">{error}</p>}
-                {!error && (
-                <div className="reviews-container">
-                    {reviewData.length > 0 ? (
-                    reviewData.filter((review) => review.storeId == currentStoreId)
-                    .map((review, index) => (
-                        // TODO: Route properly /customer/${review.customer.id}
-                        <div className="review-items-profile" key={index}>
-                            <Link to={`/customer/${review.customer?.id}`} className="link-card-profile">
-                                <div className="review-card-profile" >
-                                    <div className="review-content-profile">
-                                    {/* Left div: Review details */}
-                                    <h3>{review.customer?.name}</h3>
-                                    <p><b>Store:</b> {review.store?.name}</p>
-                                    <p className="rating"><b>Rating:</b> {review.rating}/5 ⭐</p>
-                                    <p>{review.comment}</p>
-                                    </div>
-                                    <div className="img-and-delete">
-                                        <div className="review-image-profile">
-                                        {/* Right div: Image */}
-                                            <img
-                                                // src="https://thispersondoesnotexist.com/" // TODO: Use the correct URL from the backend
-                                                src={review.customer?.url }
-                                                alt={`${review.customer?.name || "Customer"}'s picture`}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </Link>
-                            <div className="review-btns">
-                                <button className="review-edit-btn" onClick={(event) => {
-                                    event.stopPropagation();
-                                    setPressedUpdateReviewButton(true)}}>Edit Review</button>
-                                {pressedUpdateReviewButton && (
-                                    <div>
-                                        <form onSubmit="UpdateReview(review.customerId, review.id)">
-                                            <div>
-                                                <textarea
-                                                    //className="user-input"
-                                                    value={reviewMessage}
-                                                    onChange={(e) => setReviewMessage(e.target.value)}
-                                                    placeholder={"Review"}
-                                                />
-                                            </div>
-                                            <button type="submit" className="user-button">
-                                                Submit
-                                            </button>
-                                            <button onClick={() => setPressedUpdateReviewButton(false)}>Cancel</button>
-
-                                        </form>
-                                    </div>
-                                )}
-                                <button className="review-delete-btn" onClick={(event) => {
-                                    event.stopPropagation();
-                                    DeleteReview(review.customerId, review.id)}}>Delete Review</button>
-                            </div>
-                            
-                        </div>
-                    ))
-                    ) : (
-                    <p>No reviews found.</p>
-                    )}
-
-
-                </div>
-                )}
-            </ul>
-        )
-    }
 
     return (
 
@@ -286,7 +232,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(true); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Username</button>
                 {pressedChangeUsernameButton && (
                     <div>
-                        <form onSubmit={UpdateLogin} >
+                        <form onSubmit={(event) => UpdateLogin(event)} >
 
                             <div>
                                 <input
@@ -311,7 +257,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(true), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Password</button>
                 {pressedChangePasswordButton && (
                     <div>
-                        <form onSubmit={UpdateLogin}>
+                        <form onSubmit={(event) => UpdateLogin(event)}>
                             <div>
                                 <input
                                     //className="user-input"
@@ -346,7 +292,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(true), setPressedChangeUrlButton(false)}}>Update Store Name</button>
                 {pressedChangeStoreNameButton && (
                     <div>
-                        <form onSubmit={UpdateStore} >
+                        <form onSubmit={(event) => UpdateStore(event)} >
 
                             <div>
                                 <input
@@ -370,7 +316,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(true), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Description</button>
                 {pressedChangeDescButton && (
                     <div>
-                        <form onSubmit={UpdateStore} >
+                        <form onSubmit={(event) => UpdateStore(event)} >
 
                             <div>
                                 <textarea
@@ -393,7 +339,7 @@ export default function Profile() {
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(true)}}>Update Image URL</button>
                 {pressedChangeUrlButton && (
                     <div>
-                        <form onSubmit={UpdateStore} >
+                        <form onSubmit={(event) => UpdateStore(event)} >
 
                             <div>
                                 <input
@@ -419,7 +365,74 @@ export default function Profile() {
             <div>
                 <h2 id='profile-h1'>Reviews</h2>
 
-                <DisplayAllReviews></DisplayAllReviews>
+                <ul> 
+                    {error && <p className="error">{error}</p>}
+                    {!error && (
+                    <div className="reviews-container">
+                        {reviewData.length > 0 ? (
+                        reviewData.filter((review) => review.storeId == currentStoreId)
+                        .map((review, index) => (
+                            // TODO: Route properly /customer/${review.customer.id}
+                            <div className="review-items-profile" key={index}>
+                                <Link to={`/customer/${review.customer?.id}`} className="link-card-profile">
+                                    <div className="review-card-profile" >
+                                        <div className="review-content-profile">
+                                        {/* Left div: Review details */}
+                                        <h3>{review.customer?.name}</h3>
+                                        <p><b>Store:</b> {review.store?.name}</p>
+                                        <p className="rating"><b>Rating:</b> {review.rating}/5 ⭐</p>
+                                        <p>{review.comment}</p>
+                                        </div>
+                                        <div className="img-and-delete">
+                                            <div className="review-image-profile">
+                                            {/* Right div: Image */}
+                                                <img
+                                                    // src="https://thispersondoesnotexist.com/" // TODO: Use the correct URL from the backend
+                                                    src={review.customer?.url }
+                                                    alt={`${review.customer?.name || "Customer"}'s picture`}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                                <div className="review-btns">
+                                    <button className="review-edit-btn" onClick={(event) => {
+                                        event.stopPropagation();
+                                        setPressedUpdateReviewButton(review.id)}}>Edit Review</button>
+                                    {pressedUpdateReviewButton == review.id && (
+                                        <div>
+                                            <form onSubmit={(event) => UpdateReview(event, review.customerId, review.id)}>
+                                                <div>
+                                                    <textarea
+                                                        //className="user-input"
+                                                        value={reviewMessage}
+                                                        onChange={(e) => setReviewMessage(e.target.value)}
+                                                        placeholder={"Review"}
+                                                    />
+                                                </div>
+                                                <button type="submit" className="user-button">
+                                                    Submit
+                                                </button>
+                                                <button onClick={() => setPressedUpdateReviewButton(false)}>Cancel</button>
+
+                                            </form>
+                                        </div>
+                                    )}
+                                    <button className="review-delete-btn" onClick={(event) => {
+                                        event.stopPropagation();
+                                        DeleteReview(review.customerId, review.id)}}>Delete Review</button>
+                                </div>
+                                
+                            </div>
+                        ))
+                        ) : (
+                        <p>No reviews found.</p>
+                        )}
+
+
+                    </div>
+                    )}
+                </ul>
             </div>
    
         </div>

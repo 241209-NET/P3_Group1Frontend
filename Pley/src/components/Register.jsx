@@ -54,7 +54,9 @@ export default function Register() {
       const response = await axios.post('http://localhost:5028/api/Account/register', store, {
         headers: { 'Content-Type': 'application/json' },
       });
-      
+
+      console.log(response.data)
+
       if (response.status === 200 && response.data?.token) {
 
         logout();
@@ -96,7 +98,7 @@ export default function Register() {
       return;
     }
 
-    const newStore = { username, password, storeName };
+    const newStore = { name: storeName, password, username }; 
     await addStore(newStore);
     alert(`Welcome, ${username}!`);
     navigate('/home');
