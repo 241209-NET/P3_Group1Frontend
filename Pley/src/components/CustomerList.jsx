@@ -1,44 +1,35 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./CustomerList.css";
+import { Link } from "react-router-dom";
+import { useUserContext } from './UserContext';
 
 function CustomerList() {
   const [customers, setCustomers] = useState([]);
   const [sortOrder, setSortOrder] = useState("name"); // "name", "rating-asc", "rating-desc"
+  const {currentURL} = useUserContext();
 
   useEffect(() => {
-    // Fetch data from API (Uncomment when ready to fetch real data)
-    // const fetchCustomers = async () => {
-    //   try {
-    //     const response = await axios.get("http://localhost:8080/api/Customers");
-    //     setCustomers(response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching customers:", error);
-    //   }
-    // };
-    // fetchCustomers();
-
-    // Hardcoded customer data for now
-    const fetchedCustomers = [
-      { name: "John Doe", rating: 5, pictureUrl: "https://thispersondoesnotexist.com/" },
-      { name: "Jane Smith", rating: 3, pictureUrl: "https://thispersondoesnotexist.com/" },
-      { name: "Sam Lee", rating: 4, pictureUrl: "https://thispersondoesnotexist.com/" },
-      { name: "Emily Davis", rating: 2, pictureUrl: "https://thispersondoesnotexist.com/" },
-      { name: "Chris Wilson", rating: 1, pictureUrl: "https://thispersondoesnotexist.com/" },
-      { name: "Alice Brown", rating: 4, pictureUrl: "https://thispersondoesnotexist.com/" },
-    ];
-    setCustomers(fetchedCustomers);
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.get(`${currentURL}/api/Customers`);
+        setCustomers(response.data);
+      } catch (error) {
+        console.error("Error fetching customers:", error);
+      }
+    };
+    fetchCustomers();
   }, []);
 
-  // Sort order
+  // Sort order function
   const sortCustomers = (order) => {
-    const sorted = [...customers];
+    const sorted = [...customers]; // Create a shallow copy to avoid mutating state directly
     if (order === "name") {
-      sorted.sort((a, b) => a.name.localeCompare(b.name)); // Sort by name
+      sorted.sort((a, b) => a.name.localeCompare(b.name));
     } else if (order === "rating-asc") {
-      sorted.sort((a, b) => a.rating - b.rating); // Sort by rating in asc
+      sorted.sort((a, b) => a.avgRating - b.avgRating);
     } else if (order === "rating-desc") {
-      sorted.sort((a, b) => b.rating - a.rating); // Sort by rating in des
+      sorted.sort((a, b) => b.avgRating - a.avgRating);
     }
     setSortOrder(order);
     setCustomers(sorted);
@@ -51,9 +42,9 @@ function CustomerList() {
   };
 
   // Get the top 3 and bottom 3 customers
-  const sortedByRatingDesc = [...customers].sort((a, b) => b.rating - a.rating); // sort all customers
+  const sortedByRatingDesc = [...customers].sort((a, b) => b.avgRating - a.avgRating); // Sort customers by rating (descending)
   const top3Customers = sortedByRatingDesc.slice(0, 3); // Hall of Fame
-  const bottom3Customers = sortedByRatingDesc.slice(-3); // Hall of Shame
+  const bottom3Customers = [...sortedByRatingDesc].slice(-3).reverse(); // Hall of Shame
 
   return (
     <div className="customer-page">
@@ -61,7 +52,7 @@ function CustomerList() {
         <h1>Customer List</h1>
       </header>
 
-      {/* All customer table */}
+      {/* All customers table */}
       <table className="customer-table">
         <thead>
           <tr>
@@ -81,19 +72,25 @@ function CustomerList() {
           </tr>
         </thead>
         <tbody>
-          {customers.map((customer, index) => (
-            <tr key={index} className="customer-row">
-              <td>{customer.name}</td>
-              <td>{customer.rating}/5</td>
-              <td>
+        {customers.map((customer, index) => (
+          <tr key={index} className="customer-row">
+            <td>
+              <Link to={`/customer/${customer?.id}`} className="link-card">
+                {customer.name}
+              </Link>
+            </td>
+            <td>
+                {customer.avgRating}/5⭐
+            </td>
+            <td>
                 <img
-                  src={customer.pictureUrl}
+                  src={customer.url || "https://via.placeholder.com/150"}
                   alt={`${customer.name}'s avatar`}
                   className="customer-image"
                 />
-              </td>
-            </tr>
-          ))}
+            </td>
+          </tr>
+        ))}
         </tbody>
       </table>
 
@@ -111,11 +108,15 @@ function CustomerList() {
           <tbody>
             {top3Customers.map((customer, index) => (
               <tr key={index}>
-                <td>{customer.name}</td>
-                <td>{customer.rating}/5</td>
+                <td>
+                  <Link to={`/customer/${customer?.id}`} className="link-card">
+                    {customer.name}
+                  </Link>
+                </td>
+                <td>{customer.avgRating}/5⭐</td>
                 <td>
                   <img
-                    src={customer.pictureUrl}
+                    src={customer.url || "https://via.placeholder.com/150"}
                     alt={`${customer.name}'s avatar`}
                     className="customer-image"
                   />
@@ -137,11 +138,15 @@ function CustomerList() {
           <tbody>
             {bottom3Customers.map((customer, index) => (
               <tr key={index}>
-                <td>{customer.name}</td>
-                <td>{customer.rating}/5</td>
+                <td>
+                  <Link to={`/customer/${customer?.id}`} className="link-card">
+                    {customer.name}
+                  </Link>
+                </td>
+                <td>{customer.avgRating}/5⭐</td>
                 <td>
                   <img
-                    src={customer.pictureUrl}
+                    src={customer.url || "https://via.placeholder.com/150"}
                     alt={`${customer.name}'s avatar`}
                     className="customer-image"
                   />

@@ -1,5 +1,10 @@
-import { useState, useUserContext } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from "axios";
 import './Profile.css';
+import { useParams } from 'react-router-dom'
+import { useUserContext } from './UserContext';
+
 
 
 export default function Profile() {
@@ -8,10 +13,7 @@ export default function Profile() {
     //const { logout, currentDescription } = useUserContext();
     //const { logout, currentURL } = useUserContext();
 
-    let currentUsername = "test";
-    let currentDescription = "This is my description";
-    let currentURL = "URL";
-    let currentStoreName = "StoreName";
+    const { currentStoreId, currentURL } = useUserContext();
     
     //for password change
     const [password1, setPassword1] = useState('');
@@ -19,232 +21,423 @@ export default function Profile() {
     const [password2, setPassword2] = useState('');
 
     const [username, setUsername] = useState('');
+    const [storeName, setStoreName] = useState('');
+    const [description, setDescription] = useState('');
+    const [url, setUrl] = useState('');
+    const [reviewMessage, setReviewMessage] = useState('');
+
+
+    const [error, setError] = useState("");
 
     const [pressedChangeUsernameButton, setPressedChangeUsernameButton] = useState(false);
-
-    
     const [pressedChangePasswordButton, setPressedChangePasswordButton] = useState(false);
-    const [reviewData, setReviewData] = useState(null);
+    const [pressedChangeStoreNameButton, setPressedChangeStoreNameButton] = useState(false);
+    const [pressedChangeDescButton, setPressedChangeDescButton] = useState(false);
+    const [pressedChangeUrlButton, setPressedChangeUrlButton] = useState(false);
+    const [pressedUpdateReviewButton, setPressedUpdateReviewButton] = useState(null);
 
+    const [reviewData, setReviewData] = useState([]);
+    const [storeData, setStoreData] = useState([]);
+    const [storeInfo, setStoreInfo] = useState([]);
 
     
+      useEffect(() => {
+        const fetchReviews = async () => {
+          try {
+            // Fetch all reviews (hardcoded for now)
+            const response = await axios.get(`${currentURL}/api/Reviews`);
+            setReviewData(response.data)
 
-    /*
-    async function ConfirmPasswordChange() {
+            const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
+            setStoreData(currentStore);
+          } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch reviews.");
+          }
+        };
+        fetchReviews();
+      }, []);
 
-        const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
-
-        if (!regex.test(password1)) {
-
-            alert("Password must be at least 8 characters long and include uppercase, lowercase, and a number");
-            return;
-
-        }
-        if (!password1.test(password2)) {
-
-            alert("passwords do not match");
-            return;
-
-        }
-
-        //UPDATE PASSWORD HERE
+      useEffect(() => {
+        const fetchStores = async () => {
+            try {
+                // Fetch all reviews (hardcoded for now)
+                const response = await axios.get(`${currentURL}/api/Stores/${currentStoreId}`);
+                setStoreInfo(response.data);
+              } catch (err) {
+                setError(err.response?.data?.message || "Failed to load store info.");
+              }
+          };
+        fetchStores();
+      }, []);
+  
+      async function GetAllReviews()
+      {
         try {
-            const response = await axios.patch(`https://p3-pley.azurewebsites.net/api/Store/password/${password1}`);
-        } catch (error) {
-            if (error.response && error.response.status === 400) {
-                //username is available
-                return true;
-            }
-            return false;
-        }
+            // Fetch all reviews (hardcoded for now)
+            const response = await axios.get(`${currentURL}/api/Reviews`);
+            setReviewData(response.data)
 
-    }
-    */
+            const currentStore = response.data.filter((review) => review.storeId == currentStoreId);
+            setStoreData(currentStore);
+          } catch (err) {
+            setError(err.response?.data?.message || "Failed to fetch reviews.");
+          }
+      }
 
-   /*  async function GetAllReviews()
+
+    async function UpdateLogin(event)
     {
+        event.preventDefault()
         try
         {
-            const reviews = await axios.get(`https://p3-pley.azurewebsites.net/api/Store/`);
-
-            try
+            const token = localStorage.getItem('currentToken');
+            const response = await axios.patch(`${currentURL}/api/Account/login/edit`, {
+                username: username,
+                password: password2,
+            },
             {
+                headers:
+                {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
 
-                const customers = await Promise.all(
+            setStoreData({
+                ...storeData,
+                username: response.data.username,
+                password: response.data.password});
 
-                    reviews.map(async (review) => {
-                    
-                    const user = await axios.get(`https://p3-pley.azurewebsites.net/api/Customer/${review.customerId}`)
-                    
-                    return {...review, name: user.data.name}
-                    })
-                    
-                    )
-                
-            }
-            catch (error)
-            {
-                if (error.response && error.response.status === 400) {
-                    //username is available
-                    return true;
-                }
-            }
+            setStoreInfo(response.data);
         }
-        catch(error)
+        catch (err)
         {
-            if (error.response && error.response.status === 400) {
-                //username is available
-                return true;
-            }
+            setError(err.response?.data?.message || "Failed to fetch store.");
         }
-       
-    } */
+    }
 
-    function DisplayAllReviews()
+    async function UpdateStore(event)
     {
-        setReviewData(GetAllReviews());
-        currentStoreReviews = []
-
-        for (const review of reviewData)
+        event.preventDefault();
+        try
         {
-            if (review.storeId == currentStoreId)
-            {
-                currentStoreReviews += review;
-            }
+            const token = localStorage.getItem('currentToken');
+            const response = await axios.patch(`${currentURL}/api/Stores/${currentStoreId}`,
+                {
+                    name: storeName,
+                    description: description,
+                    url: url
+                },
+                {
+                    headers:
+                    {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+            setStoreData({
+                ...storeData,
+                name: response.data.name,
+                description: response.data.description,
+                url: response.data.url});
+
+            setStoreInfo(response.data);
         }
-
-        return (
-            <ul> 
-                {currentStoreReviews.map((review, index) => 
-                <div>
-                    {review.comment}
-                    {review.lastUpdated}
-                    {review.Rating}
-                    {review.name}
-
-                </div>)}
-
-            </ul>
-        )
+        catch (err)
+        {
+            setError(err.response?.data?.message || "Failed to fetch store.");
+        }
     }
 
-    function UpdatePassword() {
 
-        return (
+    async function UpdateReview(event, customerId, reviewId)
+    {
+        event.preventDefault();
 
-            <form>
+        try
+        {
+            const token = localStorage.getItem('currentToken');
+            const response = await axios.patch(`${currentURL}/api/Customers/${customerId}/reviews/${reviewId}`,
+                {
 
-                    <div>
-                        <input
-                            //className="user-input"
-                            type="password"
-                            value={password1}
-                            onChange={(e) => setPassword1(e.target.value)}
-                            required
-                            placeholder="new password"
-                        />
-                    </div>
-                    confirm change
-                    <div>
-                        <input
-                            //className="user-input"
-                            type="password"
-                            value={password2}
-                            onChange={(e) => setPassword2(e.target.value)}
-                            required
-                            placeholder="confirm new password"
-                        />
-                    </div>
-                    <button type="submit" className="user-button">
-                        Submit
-                    </button>
+                    comment: reviewMessage
+                },
+                {
+                    headers:
+                    {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
 
-                    <button onClick={() => setPressedChangePasswordButton(false)}>Cancel</button>
-                    
-                </form>
+            GetAllReviews();
 
-        );
-
+        }
+        catch(err)
+        {
+            setError(err.response?.data?.message || "Failed to fetch store.");
+        }
     }
+    
+    async function DeleteReview(customerId, reviewId)
+    {
+        
+        try
+        {
+            const token = localStorage.getItem('currentToken');
+            const response = await axios.delete(`${currentURL}/api/Customers/${customerId}/reviews/${reviewId}`,
+                {
+                    headers:
+                    {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+            GetAllReviews();
 
-    function UpdateUsername() {
-
-        return (
-
-            <form >
-
-                    <div>
-                        <input
-                            //className="user-input"
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                            placeholder={currentUsername}
-                        />
-                    </div>
-                    <button type="submit" className="user-button">
-                        Submit
-                    </button>
-                    <button onClick={() => setPressedChangeUsernameButton(false)}>Cancel</button>
-                    
-                </form>
-
-        );
-
+        }
+        catch (err)
+        {
+            setError(err.response?.data?.message || "Failed to delete review.");
+        }
     }
-
+    
 
     return (
 
-        <div>
-            <h1>Store Name</h1>
+        <div className='profile'>
+            <h1 id='profile-h1'>{storeInfo.name}</h1>
             
             <div id="store">
                 <div id="storeImgDiv">
-                    <img id="storeImg" src="https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U" alt="" /> {/** Store image fetched from URL */}
+                    <img id="storeImg" src={`${storeInfo.url}`} alt="" /> {/** Store image fetched from URL */}
                 </div>
                 
                 <div id="info">
-                    Username: {currentUsername}
-                    <br />
-                    Store Name: {currentStoreName}
-                    <br />
-                    Desc: {currentDescription}
-                    <br />
-                    URL: {currentURL}
+                    <p>
+                        <b>Username: </b> {storeInfo.username}
+                        <br />
+                        <b>Store Name: </b> {storeInfo.name}
+                        <br />
+                        <b>Desc: </b> {storeInfo.description}
+                        <br />
+                        <b>URL: </b> {storeInfo.url}
+                    </p>
+
                 </div>
                
             </div>
 
-            <div>
-                <button onClick={() => {setPressedChangeUsernameButton(true); setPressedChangePasswordButton(false)}}>Update Username</button>
+            <div className="buttons">
+                <button onClick={() => {setPressedChangeUsernameButton(true); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Username</button>
                 {pressedChangeUsernameButton && (
                     <div>
-                        <UpdateUsername />
+                        <form onSubmit={(event) => UpdateLogin(event)} >
+
+                            <div>
+                                <input
+                                    //className="user-input"
+                                    type="text"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    required
+                                    placeholder={"Username"}
+                                />
+                            </div>
+                            <button type="submit" className="user-button">
+                                Submit
+                            </button>
+                            <button onClick={() => setPressedChangeUsernameButton(false)}>Cancel</button>
+
+                        </form>
                     </div>
 
                 )}
 
-
-                <br />
-
-                <button onClick={() => {setPressedChangePasswordButton(true); setPressedChangeUsernameButton(false)}}>Update Password</button>
+                <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(true), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Password</button>
                 {pressedChangePasswordButton && (
                     <div>
-                        <UpdatePassword />
+                        <form onSubmit={(event) => UpdateLogin(event)}>
+                            <div>
+                                <input
+                                    //className="user-input"
+                                    type="password"
+                                    value={password1}
+                                    onChange={(e) => setPassword1(e.target.value)}
+                                    required
+                                    placeholder="New Password"
+                                />
+                            </div>
+                            confirm change
+                            <div>
+                                <input
+                                    //className="user-input"
+                                    type="password"
+                                    value={password2}
+                                    onChange={(e) => setPassword2(e.target.value)}
+                                    required
+                                    placeholder="Confirm New Password"
+                                />
+                            </div>
+                            <button type="submit" className="user-button">
+                                Submit
+                            </button>
+
+                            <button onClick={() => setPressedChangePasswordButton(false)}>Cancel</button>
+
+                        </form>
+                    </div>
+                )}
+
+                <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(true), setPressedChangeUrlButton(false)}}>Update Store Name</button>
+                {pressedChangeStoreNameButton && (
+                    <div>
+                        <form onSubmit={(event) => UpdateStore(event)} >
+
+                            <div>
+                                <input
+                                    //className="user-input"
+                                    type="text"
+                                    value={storeName}
+                                    onChange={(e) => setStoreName(e.target.value)}
+                                    required
+                                    placeholder={"Store Name"}
+                                />
+                            </div>
+                            <button type="submit" className="user-button">
+                                Submit
+                            </button>
+                            <button onClick={() => setPressedChangeStoreNameButton(false)}>Cancel</button>
+
+                        </form>
+                    </div>
+                )}
+
+                <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(true), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Description</button>
+                {pressedChangeDescButton && (
+                    <div>
+                        <form onSubmit={(event) => UpdateStore(event)} >
+
+                            <div>
+                                <textarea
+                                    //className="user-input"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    required
+                                    placeholder={"Description"}
+                                />
+                            </div>
+                            <button type="submit" className="user-button">
+                                Submit
+                            </button>
+                            <button onClick={() => setPressedChangeDescButton(false)}>Cancel</button>
+
+                        </form>
+                    </div>
+                )}
+
+                <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(true)}}>Update Image URL</button>
+                {pressedChangeUrlButton && (
+                    <div>
+                        <form onSubmit={(event) => UpdateStore(event)} >
+
+                            <div>
+                                <input
+                                    //className="user-input"
+                                    type="text"
+                                    value={url}
+                                    onChange={(e) => setUrl(e.target.value)}
+                                    required
+                                    placeholder={"URL"}
+                                />
+                            </div>
+                            <button type="submit" className="user-button">
+                                Submit
+                            </button>
+                            <button onClick={() => setPressedChangeUrlButton(false)}>Cancel</button>
+
+                        </form>
                     </div>
                 )}
                 
             </div> 
 
             <div>
-                Reviews
+                <h2 id='profile-h1'>Reviews</h2>
 
-                {/**<DisplayAllReviews></DisplayAllReviews>*/}
+                <ul> 
+                    {error && <p className="error">{error}</p>}
+                    {!error && (
+                    <div className="reviews-container">
+                        {reviewData.length > 0 ? (
+                        reviewData.filter((review) => review.storeId == currentStoreId)
+                        .map((review, index) => (
+                            // TODO: Route properly /customer/${review.customer.id}
+                            <div className="review-items-profile" key={index}>
+                                <Link to={`/customer/${review.customer?.id}`} className="link-card-profile">
+                                    <div className="review-card-profile" >
+                                        <div className="review-content-profile">
+                                        {/* Left div: Review details */}
+                                        <h3>{review.customer?.name}</h3>
+                                        <p><b>Store:</b> {review.store?.name}</p>
+                                        <p className="rating"><b>Rating:</b> {review.rating}/5 ⭐</p>
+                                        <p>{review.comment}</p>
+                                        </div>
+                                        <div className="img-and-delete">
+                                            <div className="review-image-profile">
+                                            {/* Right div: Image */}
+                                                <img
+                                                    // src="https://thispersondoesnotexist.com/" // TODO: Use the correct URL from the backend
+                                                    src={review.customer?.url }
+                                                    alt={`${review.customer?.name || "Customer"}'s picture`}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                                <div className="review-btns">
+                                    <button className="review-edit-btn" onClick={(event) => {
+                                        event.stopPropagation();
+                                        setPressedUpdateReviewButton(review.id)}}>Edit Review</button>
+                                    {pressedUpdateReviewButton == review.id && (
+                                        <div>
+                                            <form onSubmit={(event) => UpdateReview(event, review.customerId, review.id)}>
+                                                <div>
+                                                    <textarea
+                                                        //className="user-input"
+                                                        value={reviewMessage}
+                                                        onChange={(e) => setReviewMessage(e.target.value)}
+                                                        placeholder={"Review"}
+                                                    />
+                                                </div>
+                                                <button type="submit" className="user-button">
+                                                    Submit
+                                                </button>
+                                                <button onClick={() => setPressedUpdateReviewButton(false)}>Cancel</button>
+
+                                            </form>
+                                        </div>
+                                    )}
+                                    <button className="review-delete-btn" onClick={(event) => {
+                                        event.stopPropagation();
+                                        DeleteReview(review.customerId, review.id)}}>Delete Review</button>
+                                </div>
+                                
+                            </div>
+                        ))
+                        ) : (
+                        <p>No reviews found.</p>
+                        )}
+
+
+                    </div>
+                    )}
+                </ul>
             </div>
-
-
+   
         </div>
 
     );
