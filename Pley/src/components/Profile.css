@@ -84,11 +84,12 @@ button:hover {
     padding: 1rem;
     background: #5eb8ed;
     box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
+    /* margin-bottom: 1rem; */
     color: black;
     transition: background 0.5s ease;
     max-width: 100%;
     min-height: 100%;
+    padding: 2rem;
 }
 
 .review-content-profile {
@@ -99,11 +100,12 @@ button:hover {
 
 .review-image-profile{
     max-width: 40%;
-    bottom: 0;
+    flex: 0 0 2rem;
 }
 
 .review-image-profile img {
-    max-width: 100%;
+    width: 100%;
+    max-width: 40rem;
     height: auto;
     border-radius: 0.5rem;
     justify-content: space-evenly;
@@ -116,6 +118,12 @@ button:hover {
     flex-direction: column;
     align-items: center;
     width: 50%;
+}
+
+.review-btns
+{
+    display: flex;
+    flex-direction: row;
 }
 
 .review-delete-btn
@@ -133,8 +141,25 @@ button:hover {
     height: 1rem;
     width: 8rem;
     white-space: nowrap;
-    line-height: 0.2rem;
+    line-height: 0.2rem; 
+}
 
+.review-edit-btn
+{
+    color: black;
+    font-weight: normal;
+    font-size: 90%;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin: 0.5rem;
+    transition: background 0.5s ease;
+    height: 1rem;
+    width: 8rem;
+    white-space: nowrap;
+    line-height: 0.2rem; 
+    align-content: center;
 }
 
 .review-delete-btn:hover
@@ -152,6 +177,11 @@ button:hover {
 .review-items-profile
 {
     display: flex;
+    flex-direction: column;
     max-width: 50%;
     align-items: center;
+}
+
+#profile-h1 {
+    color: #b64300
 }

@@ -7,10 +7,6 @@ import { useUserContext } from "./UserContext";
 function Home() {
   const [reviews, setReviews] = useState([]);
   const [error, setError] = useState("");
-  const [newName, setNewName] = useState("");
-  const [newComment, setNewComment] = useState("");
-  const [newRating, setNewRating] = useState(3);
-  const {currentUsername,  currentStorename } = useUserContext();
 
   // Fetch reviews from the API when the component loads
   useEffect(() => {
@@ -35,51 +31,7 @@ function Home() {
     };
     fetchReviews();
   }, []);
-
-  // Handler for adding a new review
-  const handleAddReview = async (e) => {
-    e.preventDefault();
-    if (!newName.trim()) {
-      alert("Name cannot be empty!");
-      return;
-    }
-    if (!newComment.trim()) {
-      alert("Comment cannot be empty!");
-      return;
-    }
-    const newReview = {
-      name: newName,
-      store: currentStorename,
-      comment: newComment,
-      rating: newRating,
-    };
-
-    try {
-      const token = localStorage.getItem("authToken");
-      const response = await axios.post("http://localhost:5028/api/Reviews" ,newReview,
-        {
-          headers:
-          {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      //response will be 200 if Ok (might be 201)
-      if (response.status === 200) {
-        // Add the new review to the top of the current list
-        setReviews((prevReviews) => [response.data, ...prevReviews]);
-        setNewName("");
-        setNewComment("");
-        setNewRating(3);
-      }
-    } catch (err) {
-      console.error("Error adding review:", err);
-      alert("An error occurred while adding the review. Please try again.");
-    }
-  };
-
-  
+ 
   return (
     <div className="whole-page">
       {/* Review-card List Section */}
@@ -118,43 +70,6 @@ function Home() {
             )}
           </div>
         )}
-      </div>
-
-      {/* Add Review Section */}
-      <div className="new-review-form">
-        <h3>Add a New Review</h3>
-        <form onSubmit={handleAddReview}>
-          <input
-            className="input-field"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            placeholder="Enter customer's name"
-            required
-          />
-          <textarea
-            id="textarea-field"
-            className="input-field"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Enter your comment"
-            required
-          />
-          <select
-            id="select-field"
-            className="input-field"
-            value={newRating}
-            onChange={(e) => setNewRating(Number(e.target.value))}
-          >
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-            <option value={4}>4</option>
-            <option value={5}>5</option>
-          </select>
-          <button type="submit" className="submit-button">
-            Submit Review
-          </button>
-        </form>
       </div>
     </div>
   );
