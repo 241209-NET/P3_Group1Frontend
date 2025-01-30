@@ -41,9 +41,9 @@ export default function UserProvider({ children }) {
 
     // Login function to set user data
     function login(store) {
-        setCurrentStoreId(store.storeId);
-        setCurrentUsername(store.username);
-        setCurrentStoreName(store.name);
+        setCurrentStoreId(store.store.id);
+        setCurrentUsername(store.store.username);
+        setCurrentStoreName(store.store.name);
         setCurrentToken(store.token);
 
         //localStorage.setItem("currentToken", store.token);
