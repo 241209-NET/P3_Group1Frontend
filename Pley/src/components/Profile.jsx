@@ -218,13 +218,12 @@ export default function Profile() {
                 
                 <div id="info">
                     <p>
-                        <b>Username: </b> {storeInfo.username}
+                        {/* <b>Username: </b> {storeInfo.username}
+                        <br /> */}
                         <br />
-                        <b>Store Name: </b> {storeInfo.name}
+                        {storeInfo.description}
                         <br />
-                        <b>Desc: </b> {storeInfo.description}
-                        <br />
-                        <b>URL: </b> {storeInfo.url}
+                        {/* <b>URL: </b> {storeInfo.url} */}
                     </p>
 
                 </div>
@@ -232,9 +231,13 @@ export default function Profile() {
             </div>
 
             <div className="buttons">
-                <button onClick={() => {setPressedChangeUsernameButton(true); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Username</button>
+                <button onClick={() => {setPressedChangeUsernameButton(true); 
+                    setPressedChangeDescButton(false), 
+                    setPressedChangePasswordButton(false), 
+                    setPressedChangeStoreNameButton(false), 
+                    setPressedChangeUrlButton(false)}}>Update Username</button>
                 {pressedChangeUsernameButton && (
-                    <div>
+                    <div className='parent-btn'>
                         <form onSubmit={(event) => UpdateLogin(event)} >
 
                             <div>
@@ -259,7 +262,7 @@ export default function Profile() {
 
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(true), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Password</button>
                 {pressedChangePasswordButton && (
-                    <div>
+                    <div  className='parent-btn'>
                         <form onSubmit={(event) => UpdateLogin(event)}>
                             <div>
                                 <input
@@ -294,7 +297,7 @@ export default function Profile() {
 
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(true), setPressedChangeUrlButton(false)}}>Update Store Name</button>
                 {pressedChangeStoreNameButton && (
-                    <div>
+                    <div  className='parent-btn'>
                         <form onSubmit={(event) => UpdateStore(event)} >
 
                             <div>
@@ -318,7 +321,7 @@ export default function Profile() {
 
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(true), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(false)}}>Update Description</button>
                 {pressedChangeDescButton && (
-                    <div>
+                    <div className='parent-btn'>
                         <form onSubmit={(event) => UpdateStore(event)} >
 
                             <div>
@@ -341,7 +344,7 @@ export default function Profile() {
 
                 <button onClick={() => {setPressedChangeUsernameButton(false); setPressedChangeDescButton(false), setPressedChangePasswordButton(false), setPressedChangeStoreNameButton(false), setPressedChangeUrlButton(true)}}>Update Image URL</button>
                 {pressedChangeUrlButton && (
-                    <div>
+                    <div className='parent-btn'>
                         <form onSubmit={(event) => UpdateStore(event)} >
 
                             <div>
@@ -371,7 +374,7 @@ export default function Profile() {
                 <ul> 
                     {error && <p className="error">{error}</p>}
                     {!error && (
-                    <div className="reviews-container">
+                    <div className="reviews-container-profile">
                         {reviewData.length > 0 ? (
                         reviewData.filter((review) => review.storeId == currentStoreId)
                         .map((review, index) => (
